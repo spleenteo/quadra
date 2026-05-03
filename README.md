@@ -8,6 +8,8 @@
   A simple desktop app for macOS to fix perspective, straighten and crop your photos.
 </div>
 
+![Quadra perspective correction](screenshots/quadra-perspective.png)
+
 ---
 
 ## Download
