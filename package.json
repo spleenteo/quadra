@@ -25,6 +25,8 @@
       "main.js",
       "preload.js",
       "renderer/**/*",
+      "assets/icon.svg",
+      "assets/icon.png",
       "assets/icon.icns"
     ]
   },
