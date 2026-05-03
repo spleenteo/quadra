@@ -1,6 +1,6 @@
 {
   "name": "quadra",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Square it up — perspective correction & geometric image fixes",
   "main": "main.js",
   "author": "spleenteo",
@@ -28,6 +28,14 @@
       "assets/icon.svg",
       "assets/icon.png",
       "assets/icon.icns"
+    ],
+    "fileAssociations": [
+      {
+        "ext": ["png", "jpg", "jpeg", "webp"],
+        "name": "Image",
+        "role": "Editor",
+        "icon": "assets/icon.icns"
+      }
     ]
   },
   "devDependencies": {

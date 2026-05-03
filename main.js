@@ -3,6 +3,7 @@ const path = require('node:path');
 const fs = require('node:fs/promises');
 
 let mainWindow = null;
+let pendingOpenFile = null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -21,7 +22,27 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
   mainWindow.on('closed', () => { mainWindow = null; });
+
+  // Se è arrivato un file via "Open with Quadra" prima che la finestra fosse pronta,
+  // lo passiamo al renderer non appena ha caricato l'HTML.
+  mainWindow.webContents.once('did-finish-load', () => {
+    if (pendingOpenFile) {
+      mainWindow.webContents.send('os:open-file', pendingOpenFile);
+      pendingOpenFile = null;
+    }
+  });
 }
+
+// Su macOS l'evento 'open-file' arriva quando l'utente fa "Open with Quadra"
+// dal Finder, oppure trascina un file sull'icona dell'app nel Dock.
+app.on('open-file', (event, filePath) => {
+  event.preventDefault();
+  if (mainWindow && !mainWindow.webContents.isLoading()) {
+    mainWindow.webContents.send('os:open-file', filePath);
+  } else {
+    pendingOpenFile = filePath;
+  }
+});
 
 const IMAGE_FILTERS = [
   { name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'webp'] },

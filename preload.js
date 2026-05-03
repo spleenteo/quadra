@@ -15,4 +15,5 @@ contextBridge.exposeInMainWorld('api', {
   onMenuSave: (handler) => subscribe('menu:save', handler),
   onMenuSaveAs: (handler) => subscribe('menu:save-as', handler),
   onMenuResetAll: (handler) => subscribe('menu:reset-all', handler),
+  onOSOpenFile: (handler) => subscribe('os:open-file', handler),
 });

@@ -1303,6 +1303,16 @@ window.api.onMenuOpen(pickAndOpen);
 window.api.onMenuSave(saveCurrent);
 window.api.onMenuSaveAs(saveAs);
 
+// "Open with Quadra" dal Finder, oppure drag su icona Dock.
+window.api.onOSOpenFile(async (filePath) => {
+  try {
+    const result = await window.api.readImage(filePath);
+    await openImageFromBytes(result.bytes, result.filePath);
+  } catch (err) {
+    alert(`Could not open file: ${err.message || err}`);
+  }
+});
+
 els.canvasArea.addEventListener('dragover', (e) => {
   e.preventDefault();
   els.canvasArea.classList.add('dragover');
