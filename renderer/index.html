@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'" />
+    <title>Quadra</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="brand">
+        <img class="brand-icon" src="../assets/icon.svg" alt="" />
+        Quadra
+      </div>
+      <div class="header-actions">
+        <button class="btn" id="topbarOpenBtn" title="Open an image (⌘O)">Open…</button>
+        <button class="btn" id="topbarCloseBtn" title="Close current image" disabled>Close</button>
+        <button class="btn" id="topbarResetBtn" title="Reset all transformations (⇧⌘R)" disabled>Reset</button>
+      </div>
+      <div class="file-info" id="fileInfo">No file open</div>
+      <div class="header-actions">
+        <button class="btn" id="saveBtn" disabled>Save</button>
+        <button class="btn" id="saveAsBtn" disabled>Save As…</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="canvas-area" id="canvasArea">
+        <div class="empty-state" id="emptyState">
+          <img class="empty-icon" src="../assets/icon.svg" alt="" />
+          <h1>Drop an image here</h1>
+          <p>or</p>
+          <button class="btn primary" id="openBtn">Open image…</button>
+          <p class="hint">PNG, JPG, WebP — Cmd+O</p>
+        </div>
+
+        <div class="dual-canvas" id="dualCanvas" hidden>
+          <div class="canvas-wrap">
+            <span class="canvas-label">Original — drag the 4 corners</span>
+            <div class="canvas-container" id="origContainer">
+              <canvas id="originalCanvas"></canvas>
+              <div class="handles-overlay" id="handlesOverlay">
+                <div class="handle" data-corner="0"></div>
+                <div class="handle" data-corner="1"></div>
+                <div class="handle" data-corner="2"></div>
+                <div class="handle" data-corner="3"></div>
+                <svg class="handle-lines" id="handleLines">
+                  <polygon points="0,0 0,0 0,0 0,0" />
+                </svg>
+              </div>
+              <div class="line-overlay" id="lineOverlay" hidden>
+                <svg class="line-svg" id="lineSvg">
+                  <line x1="0" y1="0" x2="0" y2="0" />
+                </svg>
+                <div class="line-handle" data-line-pt="0"></div>
+                <div class="line-handle" data-line-pt="1"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="canvas-wrap">
+            <span class="canvas-label">Preview</span>
+            <div class="canvas-container" id="previewContainer">
+              <canvas id="previewCanvas"></canvas>
+              <div class="crop-overlay" id="cropOverlay" hidden>
+                <div class="crop-shade crop-shade-top"></div>
+                <div class="crop-shade crop-shade-bottom"></div>
+                <div class="crop-shade crop-shade-left"></div>
+                <div class="crop-shade crop-shade-right"></div>
+                <div class="crop-rect" id="cropRect">
+                  <div class="crop-handle corner" data-crop="nw"></div>
+                  <div class="crop-handle edge" data-crop="n"></div>
+                  <div class="crop-handle corner" data-crop="ne"></div>
+                  <div class="crop-handle edge" data-crop="e"></div>
+                  <div class="crop-handle corner" data-crop="se"></div>
+                  <div class="crop-handle edge" data-crop="s"></div>
+                  <div class="crop-handle corner" data-crop="sw"></div>
+                  <div class="crop-handle edge" data-crop="w"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <div class="panel">
+          <h2>Tool</h2>
+          <div class="tool-toggle">
+            <button class="btn-tool active" data-tool="perspective" disabled>Perspective</button>
+            <button class="btn-tool" data-tool="level" disabled>Straighten</button>
+          </div>
+        </div>
+        <div class="panel" id="perspectivePanel">
+          <h2>Perspective</h2>
+          <button class="btn full-width" id="resetCornersBtn" disabled>Reset corners</button>
+          <p class="hint-sm">Drag the corners on the "Original" image to define what should be straightened.</p>
+        </div>
+        <div class="panel" id="levelPanel" hidden>
+          <h2>Straighten</h2>
+          <p class="line-angle-hint">Line angle: <strong id="lineAngleDisplay">0°</strong></p>
+          <button class="btn full-width primary" id="applyLineBtn" disabled>Apply rotation</button>
+          <button class="btn full-width" id="resetLineBtn" disabled>Reset line</button>
+          <p class="hint-sm">Place the 2 endpoints on a horizontal reference (e.g. the horizon), then click "Apply".</p>
+        </div>
+        <div class="panel">
+          <h2>Rotation</h2>
+          <div class="control-row">
+            <input type="range" id="rotationSlider" min="-180" max="180" step="0.1" value="0" disabled />
+            <div class="control-input-group">
+              <input type="number" id="rotationInput" min="-180" max="180" step="0.1" value="0" disabled />
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <div class="control-actions">
+            <button class="btn-link" data-rotation-quick="-90" disabled>↺ 90</button>
+            <button class="btn-link" data-rotation-quick="90" disabled>↻ 90</button>
+            <button class="btn-link" data-rotation-quick="180" disabled>180</button>
+            <button class="btn-link" data-rotation-quick="0" disabled>0</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Horizontal skew</h2>
+          <div class="control-row">
+            <input type="range" id="skewHSlider" min="-45" max="45" step="0.1" value="0" disabled />
+            <div class="control-input-group">
+              <input type="number" id="skewHInput" min="-45" max="45" step="0.1" value="0" disabled />
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <div class="control-actions">
+            <button class="btn-link" data-skew-h-quick="0" disabled>0</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Vertical skew</h2>
+          <div class="control-row">
+            <input type="range" id="skewVSlider" min="-45" max="45" step="0.1" value="0" disabled />
+            <div class="control-input-group">
+              <input type="number" id="skewVInput" min="-45" max="45" step="0.1" value="0" disabled />
+              <span class="unit">°</span>
+            </div>
+          </div>
+          <div class="control-actions">
+            <button class="btn-link" data-skew-v-quick="0" disabled>0</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Crop</h2>
+          <div class="crop-controls" id="cropIdleControls">
+            <button class="btn full-width" id="cropEnterBtn" disabled>Crop…</button>
+            <button class="btn-link" id="cropRemoveBtn" hidden>Remove crop</button>
+          </div>
+          <div class="crop-controls" id="cropActiveControls" hidden>
+            <button class="btn full-width primary" id="cropConfirmBtn">Confirm</button>
+            <button class="btn full-width" id="cropCancelBtn">Cancel</button>
+            <p class="hint-sm">Drag the corners or the inside of the rectangle.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Export</h2>
+          <div class="dim-row">
+            <label>Format</label>
+            <select id="formatSelect" class="select-box" disabled>
+              <option value="png">PNG</option>
+              <option value="jpeg">JPG</option>
+              <option value="webp">WebP</option>
+            </select>
+          </div>
+          <div class="control-row" id="qualityRow" hidden>
+            <input type="range" id="qualitySlider" min="1" max="100" step="1" value="92" />
+            <div class="control-input-group">
+              <input type="number" id="qualityInput" min="1" max="100" step="1" value="92" />
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <p class="hint-sm">Default for "Save As…". The file extension chosen in the dialog takes precedence.</p>
+        </div>
+        <div class="panel">
+          <h2>Dimensions</h2>
+          <div class="dim-row">
+            <label>Width</label>
+            <div class="control-input-group">
+              <input type="number" id="resizeWInput" min="1" step="1" disabled />
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <div class="dim-row">
+            <label>Height</label>
+            <div class="control-input-group">
+              <input type="number" id="resizeHInput" min="1" step="1" disabled />
+              <span class="unit">px</span>
+            </div>
+          </div>
+          <div class="dim-row">
+            <label>Scale</label>
+            <div class="control-input-group">
+              <input type="number" id="resizePctInput" min="1" max="500" step="0.1" disabled />
+              <span class="unit">%</span>
+            </div>
+          </div>
+          <label class="check-row">
+            <input type="checkbox" id="lockAspectInput" checked disabled />
+            <span>Lock aspect ratio</span>
+          </label>
+          <div class="control-actions">
+            <button class="btn-link" id="resizeResetBtn" disabled>Reset</button>
+          </div>
+          <p class="hint-sm" id="resizeHint">Output: —</p>
+        </div>
+      </aside>
+    </main>
+
+    <canvas class="loupe" id="loupe" width="180" height="180" hidden></canvas>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

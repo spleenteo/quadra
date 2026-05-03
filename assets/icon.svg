@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- macOS-style squircle clip -->
+    <clipPath id="squircle">
+      <path d="M 0,224
+               C 0,72 72,0 224,0
+               L 800,0
+               C 952,0 1024,72 1024,224
+               L 1024,800
+               C 1024,952 952,1024 800,1024
+               L 224,1024
+               C 72,1024 0,952 0,800 Z"/>
+    </clipPath>
+
+    <!-- Background: soft sky-blue gradient (Big Sur feel) -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#bcdaf5"/>
+      <stop offset="50%" stop-color="#85b7e8"/>
+      <stop offset="100%" stop-color="#3f7bbf"/>
+    </linearGradient>
+
+    <!-- Strong top gloss highlight (Apple-style wet shine) -->
+    <linearGradient id="gloss" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.55"/>
+      <stop offset="40%" stop-color="white" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Bottom soft glow (ambient reflection) -->
+    <radialGradient id="bottomGlow" cx="50%" cy="100%" r="60%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Inner edge highlight (1px white inside squircle) -->
+    <linearGradient id="innerEdge" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Photo content: warm sunset palette -->
+    <linearGradient id="photoFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffe9b8"/>
+      <stop offset="55%" stop-color="#ff9c5a"/>
+      <stop offset="100%" stop-color="#a55028"/>
+    </linearGradient>
+
+    <!-- Photo white border with subtle gradient -->
+    <linearGradient id="photoBorder" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="white" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0.6"/>
+    </linearGradient>
+
+    <!-- Handle: 3D glossy sphere -->
+    <radialGradient id="handleSphere" cx="32%" cy="25%" r="80%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="25%" stop-color="#fafcff"/>
+      <stop offset="65%" stop-color="#c8d4e4"/>
+      <stop offset="100%" stop-color="#6e8aa8"/>
+    </radialGradient>
+
+    <!-- Sharp specular highlight -->
+    <radialGradient id="handleSpec" cx="32%" cy="22%" r="18%">
+      <stop offset="0%" stop-color="white" stop-opacity="1"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Bottom rim shading -->
+    <radialGradient id="handleRim" cx="50%" cy="80%" r="55%">
+      <stop offset="60%" stop-color="#3f6090" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#3f6090" stop-opacity="0.45"/>
+    </radialGradient>
+
+    <!-- Strong drop shadow for the lifted photo (Big Sur style) -->
+    <filter id="photoLift" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="14"/>
+      <feOffset dx="0" dy="22"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Soft ambient shadow under photo (close to surface) -->
+    <filter id="ambientShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="0" dy="4"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Handle drop shadow (lift) -->
+    <filter id="handleLift" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
+      <feOffset dx="0" dy="7"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background squircle with layered effects -->
+  <g clip-path="url(#squircle)">
+    <rect width="1024" height="1024" fill="url(#bgGradient)"/>
+    <rect width="1024" height="1024" fill="url(#bottomGlow)"/>
+    <rect width="1024" height="600" fill="url(#gloss)"/>
+    <!-- Top inner edge highlight -->
+    <rect x="0" y="0" width="1024" height="160" fill="url(#innerEdge)" opacity="0.5"/>
+  </g>
+
+  <!-- Photo: tilted quadrilateral with thick white border (Polaroid-feel) -->
+  <g filter="url(#photoLift)">
+    <!-- White photo frame slightly larger than the colored content -->
+    <polygon points="232,294 798,214 832,766 244,732"
+             fill="url(#photoBorder)"/>
+    <!-- Inner colored content -->
+    <polygon points="266,332 768,260 798,712 274,684"
+             fill="url(#photoFill)"/>
+    <!-- Sun -->
+    <circle cx="600" cy="380" r="42" fill="#fffbe2" opacity="0.92"/>
+    <!-- Mountain silhouettes -->
+    <polygon points="320,540 410,440 500,540" fill="#7c3a1d" opacity="0.65"/>
+    <polygon points="480,540 600,400 700,520 740,540" fill="#7c3a1d" opacity="0.65"/>
+    <!-- Ground (lower portion of photo) -->
+    <polygon points="266,540 798,510 798,712 274,684" fill="#7c3a1d" opacity="0.4"/>
+    <!-- Subtle horizon line -->
+    <line x1="266" y1="540" x2="798" y2="510" stroke="#5a2810" stroke-width="2" opacity="0.4"/>
+  </g>
+
+  <!-- Dashed selection guideline between handles -->
+  <polygon points="232,294 798,214 832,766 244,732"
+           fill="none"
+           stroke="rgba(255,255,255,0.85)"
+           stroke-width="3.5"
+           stroke-dasharray="12 9"/>
+
+  <!-- 4 corner handles: very 3D, glossy spheres -->
+  <g filter="url(#handleLift)">
+    <!-- TL -->
+    <g transform="translate(232,294)">
+      <circle r="58" fill="url(#handleSphere)"/>
+      <circle r="58" fill="url(#handleRim)"/>
+      <ellipse cx="-15" cy="-22" rx="22" ry="14" fill="url(#handleSpec)"/>
+    </g>
+    <!-- TR -->
+    <g transform="translate(798,214)">
+      <circle r="58" fill="url(#handleSphere)"/>
+      <circle r="58" fill="url(#handleRim)"/>
+      <ellipse cx="-15" cy="-22" rx="22" ry="14" fill="url(#handleSpec)"/>
+    </g>
+    <!-- BR -->
+    <g transform="translate(832,766)">
+      <circle r="58" fill="url(#handleSphere)"/>
+      <circle r="58" fill="url(#handleRim)"/>
+      <ellipse cx="-15" cy="-22" rx="22" ry="14" fill="url(#handleSpec)"/>
+    </g>
+    <!-- BL -->
+    <g transform="translate(244,732)">
+      <circle r="58" fill="url(#handleSphere)"/>
+      <circle r="58" fill="url(#handleRim)"/>
+      <ellipse cx="-15" cy="-22" rx="22" ry="14" fill="url(#handleSpec)"/>
+    </g>
+  </g>
+</svg>
