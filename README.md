@@ -30,6 +30,7 @@ Quadra helps you fix images that need geometric correction:
 - ✂️ **Manual crop** — rectangular crop with 8 handles + draggable interior
 - 📐 **Resize** — width/height in pixels or scale percentage, with optional aspect ratio lock
 - 💾 **Save** in PNG, JPG, or WebP format with adjustable quality
+- 🖱️ **Open with Quadra** — right-click an image in Finder and pick Quadra from the "Open With" menu
 
 Everything happens locally on your machine. No uploads, no servers.
 
@@ -64,7 +65,7 @@ While dragging any handle, a circular loupe appears with a 3× zoom of the area,
 You'll need [Node.js](https://nodejs.org/) (v18+).
 
 ```bash
-git clone https://github.com/<your-username>/quadra.git
+git clone https://github.com/spleenteo/quadra.git
 cd quadra
 npm install
 npm run dev          # run the app in development mode
