@@ -58,6 +58,10 @@ const els = {
   cropConfirmBtn: document.getElementById('cropConfirmBtn'),
   cropCancelBtn: document.getElementById('cropCancelBtn'),
   cropRemoveBtn: document.getElementById('cropRemoveBtn'),
+  cropPanel: document.getElementById('cropPanel'),
+  railCropBtn: document.getElementById('railCropBtn'),
+  statusSource: document.getElementById('statusSource'),
+  statusDirty: document.getElementById('statusDirty'),
   cropIdleControls: document.getElementById('cropIdleControls'),
   cropActiveControls: document.getElementById('cropActiveControls'),
   resizeWInput: document.getElementById('resizeWInput'),
@@ -495,7 +499,7 @@ function applyResizeToPreview() {
   ctx.clearRect(0, 0, targetW, targetH);
   ctx.drawImage(stageC, 0, 0, targetW, targetH);
 
-  els.resizeHint.textContent = `Output: ${targetW} × ${targetH} px`;
+  els.resizeHint.textContent = `Output ${targetW} × ${targetH} px`;
 }
 
 function updateHandlesPositions() {
@@ -850,6 +854,7 @@ els.cropHandles.forEach(setupCropDrag);
 })();
 
 els.cropEnterBtn.addEventListener('click', enterCropMode);
+els.railCropBtn.addEventListener('click', () => { if (state.cropMode) cancelCrop(); else enterCropMode(); });
 els.cropConfirmBtn.addEventListener('click', confirmCrop);
 els.cropCancelBtn.addEventListener('click', cancelCrop);
 els.cropRemoveBtn.addEventListener('click', removeCrop);
@@ -859,6 +864,7 @@ els.cropRemoveBtn.addEventListener('click', removeCrop);
 // === LEVEL TOOL (linea) ===
 
 function setTool(tool) {
+  if (state.cropMode) cancelCrop();
   state.tool = tool;
   els.toolButtons.forEach((b) => b.classList.toggle('active', b.dataset.tool === tool));
   els.perspectivePanel.hidden = tool !== 'perspective';
@@ -1209,7 +1215,9 @@ function updateUI() {
   els.skewVInput.disabled = !hasImage;
   els.skewVQuickBtns.forEach((b) => { b.disabled = !hasImage; });
   els.cropEnterBtn.disabled = !hasImage;
-  els.cropEnterBtn.textContent = state.cropRect ? 'Edit crop…' : 'Crop…';
+  els.railCropBtn.disabled = !hasImage;
+  els.railCropBtn.classList.toggle('active', state.cropMode);
+  els.cropPanel.hidden = !state.cropRect && !state.cropMode;
   els.cropRemoveBtn.hidden = !state.cropRect || state.cropMode;
   els.cropIdleControls.hidden = state.cropMode;
   els.cropActiveControls.hidden = !state.cropMode;
@@ -1223,18 +1231,24 @@ function updateUI() {
   els.qualityInput.disabled = !hasImage;
   els.topbarCloseBtn.disabled = !hasImage;
   els.topbarResetBtn.disabled = !hasImage;
-  els.toolButtons.forEach((b) => { b.disabled = !hasImage; });
+  els.toolButtons.forEach((b) => {
+    b.disabled = !hasImage;
+    b.classList.toggle('active', !state.cropMode && b.dataset.tool === state.tool);
+  });
   els.resetLineBtn.disabled = !hasImage;
   els.applyLineBtn.disabled = !hasImage;
   els.fileInfo.classList.toggle('dirty', state.isDirty);
+  els.statusDirty.hidden = !hasImage || !state.isDirty;
 
   if (!hasImage) {
     els.fileInfo.textContent = 'No file open';
+    els.statusSource.textContent = 'No image';
+    els.resizeHint.textContent = '';
     return;
   }
-  const dims = `${state.imageBitmap.width}×${state.imageBitmap.height}`;
   const name = state.filePath ? state.filePath.split('/').pop() : '(from clipboard)';
-  els.fileInfo.textContent = `${name} — ${dims}`;
+  els.fileInfo.textContent = name;
+  els.statusSource.textContent = `Source ${state.imageBitmap.width} × ${state.imageBitmap.height} px`;
 }
 
 function encodeCanvas(canvas, mimeType, quality) {

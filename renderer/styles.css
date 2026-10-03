@@ -21,41 +21,49 @@ html, body {
   user-select: none;
 }
 
-.header {
-  height: 44px;
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+[hidden] { display: none !important; }
+
+
+.topbar {
+  height: 48px;
+  flex: none;
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  gap: 12px;
+  padding-right: 16px;
   background: var(--bg-panel);
   border-bottom: 1px solid var(--border);
   -webkit-app-region: drag;
 }
 
-.brand {
+.brand-cell {
+  width: 84px;
+  align-self: stretch;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  margin-left: 12px;
+  justify-content: center;
+  border-right: 1px solid var(--border);
 }
 
 .brand-icon {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   display: block;
 }
 
 .file-info {
-  margin-left: auto;
-  color: var(--text-dim);
-  font-size: 12px;
-  padding: 0 12px;
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 360px;
-  text-align: right;
 }
 
 .file-info.dirty::after {
@@ -65,13 +73,16 @@ html, body {
 
 .header-actions {
   display: flex;
-  gap: 6px;
-  margin-left: 12px;
+  gap: 8px;
   -webkit-app-region: no-drag;
 }
 
+.brand-cell + .header-actions {
+  margin-left: 4px;
+}
+
 .header-actions .btn {
-  padding: 5px 12px;
+  padding: 5px 14px;
   font-size: 12px;
 }
 
@@ -81,9 +92,64 @@ html, body {
 }
 
 .workspace {
+  flex: 1;
+  min-height: 0;
   display: flex;
-  height: calc(100% - 44px);
 }
+
+.tool-rail {
+  width: 84px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  padding: 12px 8px;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+}
+
+.rail-tool {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 2px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+
+.rail-tool svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rail-tool.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.rail-tool:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.rail-tool:not(.active):not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
 
 .canvas-area {
   flex: 1;
@@ -279,42 +345,6 @@ html, body {
   background: var(--accent);
 }
 
-.tool-toggle {
-  display: flex;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 2px;
-  gap: 2px;
-}
-
-.btn-tool {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-dim);
-  font: inherit;
-  font-size: 12px;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.1s, color 0.1s;
-}
-
-.btn-tool.active {
-  background: var(--accent);
-  color: white;
-}
-
-.btn-tool:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-tool:not(.active):not(:disabled):hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
-}
 
 .line-angle-hint {
   font-size: 12px;
@@ -527,28 +557,114 @@ html, body {
   opacity: 0.5;
 }
 
-.sidebar {
-  width: 280px;
+
+.inspector {
+  width: 288px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
   background: var(--bg-panel);
   border-left: 1px solid var(--border);
-  padding: 16px;
   overflow-y: auto;
 }
 
-.panel h2 {
+.section {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section + .section {
+  border-top: 1px solid var(--border);
+}
+
+.section h2 {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--text-dim);
-  margin-bottom: 12px;
 }
 
-.panel .placeholder {
-  color: var(--text-dim);
-  font-size: 12px;
-  font-style: italic;
+.section .btn.full-width,
+.section .line-angle-hint {
+  margin-bottom: 0;
 }
+
+.adjust-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.adjust-row label {
+  width: 52px;
+  flex: none;
+  color: var(--text-dim);
+}
+
+.adjust-row input[type="range"] {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--accent);
+}
+
+.control-actions.indent {
+  padding-left: 60px;
+}
+
+.reset-dot {
+  padding: 3px 6px;
+}
+
+.size-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.size-row.spread {
+  justify-content: space-between;
+}
+
+.size-row > label {
+  color: var(--text-dim);
+}
+
+.size-row .control-input-group {
+  flex: 1;
+}
+
+.size-row.spread .control-input-group {
+  flex: none;
+}
+
+.size-row.spread .check-row {
+  margin: 0;
+}
+
+.dim-row label {
+  color: var(--text-dim);
+}
+
+.statusbar {
+  height: 28px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+  background: var(--bg-panel);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.status-strong { color: var(--text); }
+.status-spacer { flex: 1; }
+.status-dirty { color: var(--accent); }
+
 
 .btn {
   display: inline-block;
@@ -576,4 +692,10 @@ html, body {
 .btn.primary:hover {
   background: var(--accent-hover);
   border-color: var(--accent-hover);
+}
+
+.crop-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

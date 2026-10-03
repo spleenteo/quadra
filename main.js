@@ -9,7 +9,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 820,
-    minWidth: 900,
+    minWidth: 1000,
     minHeight: 600,
     title: 'Quadra',
     icon: path.join(__dirname, 'assets', 'icon.png'),

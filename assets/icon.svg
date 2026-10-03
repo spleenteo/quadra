@@ -1,170 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
   <defs>
-    <!-- macOS-style squircle clip -->
     <clipPath id="squircle">
-      <path d="M 0,224
-               C 0,72 72,0 224,0
-               L 800,0
-               C 952,0 1024,72 1024,224
-               L 1024,800
-               C 1024,952 952,1024 800,1024
-               L 224,1024
-               C 72,1024 0,952 0,800 Z"/>
+      <path d="M 0,224 C 0,72 72,0 224,0 L 800,0 C 952,0 1024,72 1024,224 L 1024,800 C 1024,952 952,1024 800,1024 L 224,1024 C 72,1024 0,952 0,800 Z"/>
     </clipPath>
-
-    <!-- Background: soft sky-blue gradient (Big Sur feel) -->
-    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#bcdaf5"/>
-      <stop offset="50%" stop-color="#85b7e8"/>
-      <stop offset="100%" stop-color="#3f7bbf"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5AA0F2"/>
+      <stop offset="1" stop-color="#2F6FC0"/>
     </linearGradient>
-
-    <!-- Strong top gloss highlight (Apple-style wet shine) -->
-    <linearGradient id="gloss" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="white" stop-opacity="0.55"/>
-      <stop offset="40%" stop-color="white" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="white" stop-opacity="0"/>
-    </linearGradient>
-
-    <!-- Bottom soft glow (ambient reflection) -->
-    <radialGradient id="bottomGlow" cx="50%" cy="100%" r="60%">
-      <stop offset="0%" stop-color="white" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="white" stop-opacity="0"/>
-    </radialGradient>
-
-    <!-- Inner edge highlight (1px white inside squircle) -->
-    <linearGradient id="innerEdge" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="white" stop-opacity="0.7"/>
-      <stop offset="100%" stop-color="white" stop-opacity="0"/>
-    </linearGradient>
-
-    <!-- Photo content: warm sunset palette -->
-    <linearGradient id="photoFill" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffe9b8"/>
-      <stop offset="55%" stop-color="#ff9c5a"/>
-      <stop offset="100%" stop-color="#a55028"/>
-    </linearGradient>
-
-    <!-- Photo white border with subtle gradient -->
-    <linearGradient id="photoBorder" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="white" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="white" stop-opacity="0.6"/>
-    </linearGradient>
-
-    <!-- Handle: 3D glossy sphere -->
-    <radialGradient id="handleSphere" cx="32%" cy="25%" r="80%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="25%" stop-color="#fafcff"/>
-      <stop offset="65%" stop-color="#c8d4e4"/>
-      <stop offset="100%" stop-color="#6e8aa8"/>
-    </radialGradient>
-
-    <!-- Sharp specular highlight -->
-    <radialGradient id="handleSpec" cx="32%" cy="22%" r="18%">
-      <stop offset="0%" stop-color="white" stop-opacity="1"/>
-      <stop offset="100%" stop-color="white" stop-opacity="0"/>
-    </radialGradient>
-
-    <!-- Bottom rim shading -->
-    <radialGradient id="handleRim" cx="50%" cy="80%" r="55%">
-      <stop offset="60%" stop-color="#3f6090" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#3f6090" stop-opacity="0.45"/>
-    </radialGradient>
-
-    <!-- Strong drop shadow for the lifted photo (Big Sur style) -->
-    <filter id="photoLift" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="14"/>
-      <feOffset dx="0" dy="22"/>
-      <feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
-      <feMerge>
-        <feMergeNode/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
-    <!-- Soft ambient shadow under photo (close to surface) -->
-    <filter id="ambientShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
-      <feOffset dx="0" dy="4"/>
-      <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
-      <feMerge>
-        <feMergeNode/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
-    <!-- Handle drop shadow (lift) -->
-    <filter id="handleLift" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
-      <feOffset dx="0" dy="7"/>
-      <feComponentTransfer><feFuncA type="linear" slope="0.55"/></feComponentTransfer>
-      <feMerge>
-        <feMergeNode/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
-
-  <!-- Background squircle with layered effects -->
   <g clip-path="url(#squircle)">
-    <rect width="1024" height="1024" fill="url(#bgGradient)"/>
-    <rect width="1024" height="1024" fill="url(#bottomGlow)"/>
-    <rect width="1024" height="600" fill="url(#gloss)"/>
-    <!-- Top inner edge highlight -->
-    <rect x="0" y="0" width="1024" height="160" fill="url(#innerEdge)" opacity="0.5"/>
-  </g>
-
-  <!-- Photo: tilted quadrilateral with thick white border (Polaroid-feel) -->
-  <g filter="url(#photoLift)">
-    <!-- White photo frame slightly larger than the colored content -->
-    <polygon points="232,294 798,214 832,766 244,732"
-             fill="url(#photoBorder)"/>
-    <!-- Inner colored content -->
-    <polygon points="266,332 768,260 798,712 274,684"
-             fill="url(#photoFill)"/>
-    <!-- Sun -->
-    <circle cx="600" cy="380" r="42" fill="#fffbe2" opacity="0.92"/>
-    <!-- Mountain silhouettes -->
-    <polygon points="320,540 410,440 500,540" fill="#7c3a1d" opacity="0.65"/>
-    <polygon points="480,540 600,400 700,520 740,540" fill="#7c3a1d" opacity="0.65"/>
-    <!-- Ground (lower portion of photo) -->
-    <polygon points="266,540 798,510 798,712 274,684" fill="#7c3a1d" opacity="0.4"/>
-    <!-- Subtle horizon line -->
-    <line x1="266" y1="540" x2="798" y2="510" stroke="#5a2810" stroke-width="2" opacity="0.4"/>
-  </g>
-
-  <!-- Dashed selection guideline between handles -->
-  <polygon points="232,294 798,214 832,766 244,732"
-           fill="none"
-           stroke="rgba(255,255,255,0.85)"
-           stroke-width="3.5"
-           stroke-dasharray="12 9"/>
-
-  <!-- 4 corner handles: very 3D, glossy spheres -->
-  <g filter="url(#handleLift)">
-    <!-- TL -->
-    <g transform="translate(232,294)">
-      <circle r="58" fill="url(#handleSphere)"/>
-      <circle r="58" fill="url(#handleRim)"/>
-      <ellipse cx="-15" cy="-22" rx="22" ry="14" fill="url(#handleSpec)"/>
-    </g>
-    <!-- TR -->
-    <g transform="translate(798,214)">
-      <circle r="58" fill="url(#handleSphere)"/>
-      <circle r="58" fill="url(#handleRim)"/>
-      <ellipse cx="-15" cy="-22" rx="22" ry="14" fill="url(#handleSpec)"/>
-    </g>
-    <!-- BR -->
-    <g transform="translate(832,766)">
-      <circle r="58" fill="url(#handleSphere)"/>
-      <circle r="58" fill="url(#handleRim)"/>
-      <ellipse cx="-15" cy="-22" rx="22" ry="14" fill="url(#handleSpec)"/>
-    </g>
-    <!-- BL -->
-    <g transform="translate(244,732)">
-      <circle r="58" fill="url(#handleSphere)"/>
-      <circle r="58" fill="url(#handleRim)"/>
-      <ellipse cx="-15" cy="-22" rx="22" ry="14" fill="url(#handleSpec)"/>
+    <rect width="1024" height="1024" fill="url(#bg)"/>
+    <g transform="scale(4.26667)">
+      <path d="M39.0 47.8L46.0 47.1M54.8 46.3L61.8 45.6M70.6 44.7L77.6 44.0M86.3 43.2L93.3 42.5M102.1 41.6L109.1 40.9M117.9 40.1L124.9 39.4M133.6 38.5L140.6 37.8M149.4 36.9L156.4 36.2M165.1 35.4L172.2 34.7M180.9 33.8L181.6 33.8M181.6 33.8L182.0 40.8M182.5 49.6L182.9 56.6M183.4 65.4L183.8 72.4M184.3 81.2L184.7 88.2M185.2 97.0L185.6 104.0M186.1 112.8L186.5 119.9M187.1 128.6L187.5 135.7M188.0 144.5L188.4 151.5M188.9 160.3L189.3 167.3M189.8 176.1L190.2 183.1M190.4 186.9L183.4 187.3M174.6 187.8L167.6 188.3M158.8 188.8L151.8 189.2M143.0 189.8L135.9 190.2M127.2 190.7L120.1 191.2M111.3 191.7L104.3 192.1M95.5 192.7L88.5 193.1M79.7 193.6L72.7 194.1M63.9 194.6L56.9 195.0M48.1 195.6L46.1 195.7M46.1 195.7L45.7 188.6M45.3 179.9L45.0 172.8M44.6 164.0L44.2 157.0M43.8 148.2L43.5 141.2M43.1 132.4L42.7 125.4M42.3 116.6L42.0 109.5M41.6 100.7L41.2 93.7M40.8 84.9L40.5 77.9M40.1 69.1L39.7 62.1M39.3 53.3L39.0 47.8" fill="none" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="4.4" stroke-linecap="round"/>
+      <rect x="54.88" y="54.88" width="123.20" height="123.20" rx="33.44" fill="#FFFFFF"/>
+      <path transform="translate(115.67 118.67) scale(0.0445 -0.0445) translate(-792.3 -696.4)" fill="#2F6FC0" d="M683.99951171875 531.36083984375H970.16064453125L1096.64013671875 371.12158203125L1252.6416015625 191.52001953125L1502.16162109375 -117.19970703125H1182.56005859375L1008.39990234375 91.68017578125L908.63916015625 235.84130859375ZM791.60009765625 -20Q591.47998046875 -20 430.579833984375 69.0799560546875Q269.6796875 158.159912109375 176.07958984375 328.89990234375Q82.4794921875 499.639892578125 82.4794921875 744Q82.4794921875 990.1201171875 176.07958984375 1161.2401123046875Q269.6796875 1332.360107421875 430.579833984375 1421.1800537109375Q591.47998046875 1510 791.60009765625 1510Q991.72021484375 1510 1152.120361328125 1421.1800537109375Q1312.5205078125 1332.360107421875 1406.380615234375 1161.2401123046875Q1500.24072265625 990.1201171875 1500.24072265625 744Q1500.24072265625 498.8798828125 1406.380615234375 328.139892578125Q1312.5205078125 157.39990234375 1152.120361328125 68.699951171875Q991.72021484375 -20 791.60009765625 -20ZM791.60009765625 289.76171875Q900.27978515625 289.76171875 978.139404296875 342.0615234375Q1055.9990234375 394.361328125 1097.8387451171875 495.8409423828125Q1139.678466796875 597.320556640625 1139.678466796875 744Q1139.678466796875 891.91943359375 1097.8387451171875 993.779052734375Q1055.9990234375 1095.638671875 978.139404296875 1147.9384765625Q900.27978515625 1200.23828125 791.60009765625 1200.23828125Q683.4404296875 1200.23828125 605.4608154296875 1147.8184814453125Q527.481201171875 1095.398681640625 485.261474609375 993.5390625Q443.041748046875 891.679443359375 443.041748046875 744Q443.041748046875 597.320556640625 485.261474609375 495.9609375Q527.481201171875 394.601318359375 605.4608154296875 342.1815185546875Q683.4404296875 289.76171875 791.60009765625 289.76171875Z"/>
+      <circle cx="190.40" cy="186.88" r="19.5" fill="#FFFFFF"/>
+      <circle cx="190.40" cy="186.88" r="14.2" fill="#4A90E2"/>
     </g>
   </g>
 </svg>
