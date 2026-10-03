@@ -1,6 +1,6 @@
 {
   "name": "quadra",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Square it up — perspective correction & geometric image fixes",
   "main": "main.js",
   "author": "spleenteo",
@@ -11,12 +11,16 @@
     "build-icon": "electron scripts/build-icon.js"
   },
   "build": {
+    "dmg": {
+      "artifactName": "Quadra-${arch}.${ext}"
+    },
     "appId": "me.spleenteo.quadra",
     "productName": "Quadra",
     "mac": {
       "category": "public.app-category.photography",
       "target": [
-        { "target": "zip", "arch": ["arm64", "x64"] }
+        { "target": "zip", "arch": ["arm64", "x64"] },
+        { "target": "dmg", "arch": ["arm64", "x64"] }
       ],
       "icon": "assets/icon.icns",
       "identity": null

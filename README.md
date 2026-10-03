@@ -14,12 +14,11 @@
 
 ## Download
 
-👉 **[Download the latest release](../../releases/latest)** for macOS (Apple Silicon and Intel).
+👉 **[Download the latest release](../../releases/latest)** for macOS: [Apple Silicon (.dmg)](https://github.com/spleenteo/quadra/releases/latest/download/Quadra-arm64.dmg) or [Intel (.dmg)](https://github.com/spleenteo/quadra/releases/latest/download/Quadra-x64.dmg). More on the [website](https://spleenteo.github.io/quadra/).
 
 After downloading:
-1. Unzip the file
-2. Drag `Quadra.app` into your `/Applications` folder
-3. **First launch**: right-click on `Quadra.app` → *Open* → *Open* (the app is unsigned, so macOS will ask for confirmation only the first time)
+1. Open the `.dmg` and drag `Quadra.app` into your `/Applications` folder
+2. **First launch**: right-click on `Quadra.app` → *Open* → *Open* (the app is unsigned, so macOS will ask for confirmation only the first time)
 
 ## What it does
 
