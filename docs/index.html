@@ -277,9 +277,10 @@
       <p class="hint">Not sure which one? Apple menu → About This Mac. “Chip” says Apple M-something for Apple Silicon.</p>
       <div class="steps">
         <div><b>1</b><p>Open the .dmg and drag Quadra into your Applications folder.</p></div>
-        <div><b>2</b><p>First launch: right-click Quadra, choose Open, then Open again.</p></div>
-        <div><b>3</b><p>That’s it. macOS asks only once, because the app isn’t signed yet.</p></div>
+        <div><b>2</b><p>First launch: open Quadra. macOS says “Apple could not verify Quadra…”. Click Done.</p></div>
+        <div><b>3</b><p>Open System Settings → Privacy &amp; Security, scroll down, click Open Anyway next to Quadra and confirm. macOS asks only once, because Quadra isn’t notarized by Apple yet.</p></div>
       </div>
+      <p class="hint">Prefer Terminal? Run <code>xattr -dr com.apple.quarantine /Applications/Quadra.app</code>, then open Quadra normally.</p>
     </section>
   </main>
 

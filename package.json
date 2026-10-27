@@ -1,6 +1,6 @@
 {
   "name": "quadra",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Square it up — perspective correction & geometric image fixes",
   "main": "main.js",
   "author": "spleenteo",
@@ -11,6 +11,7 @@
     "build-icon": "electron scripts/build-icon.js"
   },
   "build": {
+    "afterPack": "./scripts/adhoc-sign.js",
     "dmg": {
       "artifactName": "Quadra-${arch}.${ext}"
     },

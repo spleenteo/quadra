@@ -18,7 +18,14 @@
 
 After downloading:
 1. Open the `.dmg` and drag `Quadra.app` into your `/Applications` folder
-2. **First launch**: right-click on `Quadra.app` → *Open* → *Open* (the app is unsigned, so macOS will ask for confirmation only the first time)
+2. **First launch**: open Quadra. macOS shows *Apple could not verify “Quadra” is free of malware…*: click *Done*
+3. Open **System Settings → Privacy & Security**, scroll down, click *Open Anyway* next to Quadra and confirm. macOS asks only this once: Quadra is signed ad-hoc but not notarized by Apple yet.
+
+Prefer Terminal? Run this once instead of steps 2–3:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Quadra.app
+```
 
 ## What it does
 
@@ -99,7 +106,8 @@ quadra/
 │   ├── icon.png         # 1024x1024 export
 │   └── icon.icns        # macOS bundle icon
 └── scripts/
-    └── build-icon.js    # regenerates icon.png from icon.svg
+    ├── build-icon.js    # regenerates icon.png from icon.svg
+    └── adhoc-sign.js    # afterPack hook: ad-hoc signs the .app
 ```
 
 ## License
