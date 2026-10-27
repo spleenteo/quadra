@@ -1,8 +1,8 @@
 ---
 status: open
-phase: impact
-slice: null
-step: null
+phase: slice
+slice: V1
+step: plan
 work: dmg-damaged
 stacks: [node]
 base: main
@@ -25,3 +25,4 @@ description: "L'app scaricata dal DMG si apre senza l'errore 'danneggiata'"
 
 <!-- date — step — done — remaining — wall-clock — cost -->
 - 10-27 — opening + slicing — profile recorded, one-slice bugfix, option A (ad-hoc) chosen; frame, shaping, breadboard, design skipped (problem clear, no UI) — impact, V1 — 15 min — n/a
+- 10-27 — impact — 0 high, 4 medium, 3 low; all 7 fixes applied to V1 (inside-out signing with verify, exact spctl criterion, release before push, Pages exclude, stale copy, zip check, afterPack) — V1 plan — 3 min — n/a
