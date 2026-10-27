@@ -2,7 +2,7 @@
 status: open
 phase: slice
 slice: V1
-step: plan
+step: review
 work: dmg-damaged
 stacks: [node]
 base: main

@@ -33,3 +33,7 @@ Chosen: **ad-hoc signing** (option A). Developer ID + notarization (option B) is
 - `docs/` is published by GitHub Pages: the landing change goes live at merge + push. **Release first, push after**: the new DMGs must be on the GitHub release before `main` is pushed, or the site describes "Open Anyway" for a 0.6.0 DMG that still says "damaged".
 - `afterSign` is skipped by electron-builder when `identity: null`; the hook must be `afterPack`. After the user's afterPack nothing rewrites the bundle (Info.plist and `ElectronAsarIntegrity` are written earlier, 25.1.8 has no fuses, dmg-builder copies the app with `hdiutil -srcfolder` and doesn't sign without `dmg.sign`).
 - `spctl` never prints "damaged" or "cannot verify": the Done checks its exact output instead.
+
+### Deviations found while planning V1
+
+- T3 also adds `adhoc-sign.js` to the README "Project structure" list, so the developer docs name the new script (same file the slice already edits).
