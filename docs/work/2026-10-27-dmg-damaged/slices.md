@@ -37,3 +37,10 @@ Chosen: **ad-hoc signing** (option A). Developer ID + notarization (option B) is
 ### Deviations found while planning V1
 
 - T3 also adds `adhoc-sign.js` to the README "Project structure" list, so the developer docs name the new script (same file the slice already edits).
+
+### V1 — done on 2026-10-27
+
+- Ad-hoc signing lives in `scripts/adhoc-sign.js`, wired as `build.afterPack`; `identity: null` stays so electron-builder signs nothing after it. Per arch it re-signs 6 loose Mach-O (4 Electron dylibs, `chrome_crashpad_handler`, `ShipIt`), 4 frameworks, 4 helpers and the app; strict deep verify passes on `dist/`, on both DMGs and on both zips.
+- macOS 27's `spctl -a -vv` prints a single `<path>: rejected` line for an ad-hoc app, with no `source=` line: the Done criterion was relaxed to "one line, rejected, no integrity error" (ruling in the ledger), confirmed with `syspolicy_check distribution`, which reports only "Adhoc Signed App" and "Notary Ticket Missing".
+- T1's report lacked the `npm run dist` exit code; the gate captured it (`exit=0`).
+- Still open on the user: a real browser download of the new arm64 DMG, going through "Apple could not verify" → Done → *Open Anyway*. Release first, push `main` after.
