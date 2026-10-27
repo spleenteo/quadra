@@ -7684,7 +7684,7 @@
                   "fill": "$text-dim",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "You shoot a book page from an angle. A sign leans. A horizon drifts a few degrees. Fixing it is simple geometry, but the tools for it hide inside heavyweight editors, or behind websites that want your upload first.",
+                  "content": "My daughter kept asking me to print her school homework, and she kept sending me photos of it, always crooked. All I wanted was to straighten them. Opening Photoshop for that is overkill.",
                   "lineHeight": 1.6,
                   "fontFamily": "$font-ui",
                   "fontSize": 18
@@ -7696,7 +7696,7 @@
                   "fill": "$text-dim",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "Quadra does that one job. Drag four handles around what should be a rectangle, draw a line along what should be level, and watch the result update live.",
+                  "content": "So I built Quadra to do that one job. Drag four handles around what should be a rectangle, draw a line along what should be level, and watch the result update live.",
                   "lineHeight": 1.6,
                   "fontFamily": "$font-ui",
                   "fontSize": 18
