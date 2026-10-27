@@ -7,6 +7,7 @@ work: dmg-damaged
 stacks: [node]
 base: main
 updated: 2026-10-27
+archived: 2026-10-27
 tags: [work, dmg-damaged]
 description: "L'app scaricata dal DMG si apre senza l'errore 'danneggiata'"
 ---
