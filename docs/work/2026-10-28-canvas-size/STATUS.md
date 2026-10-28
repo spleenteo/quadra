@@ -1,6 +1,6 @@
 ---
 status: open
-phase: shaping
+phase: design
 slice: null
 step: null
 work: canvas-size
@@ -25,3 +25,5 @@ description: "Allargare il canvas di un'immagine con sfondo trasparente o di col
 
 <!-- date — step — done — remaining — wall-clock — cost -->
 - 2026-10-28 — open — home created, profile recorded (tests: none, design: pen) — shaping next — 10 min — n/a
+- 2026-10-28 — shaping — shape selected: rail button "Canvas" on Crop's model, uniform px padding after resize, JPG flattened on white; fidelity check skipped (no frame) — design on quadra.pen next — 25 min — n/a
+- 2026-10-28 — design — opened — panel and placement to draw — — 
