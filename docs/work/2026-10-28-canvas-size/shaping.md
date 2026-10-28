@@ -1,7 +1,7 @@
 ---
 shaping: true
 work: canvas-size
-updated: 2026-10-28
+updated: 2026-10-29
 ---
 
 # Canvas size — Shaping
@@ -112,12 +112,12 @@ Le alternative di X3 cambiano solo il punto d'ingresso. Il meccanismo è lo stes
 |------|-----------|:----:|
 | M1 | Controlli in px: con lock un campo "All sides"; senza lock T / R / B / L; valori interi ≥ 0 (`min="0"`) | |
 | M2 | Lock: il valore di "All sides" va identico su t, r, b, l. Togliendo il lock i quattro campi partono da quel valore; rimettendolo, "All sides" prende il valore di top e lo ricopia sugli altri | |
-| M3 | Sfondo: Transparent / Color (`<input type="color">`); se il formato di output è JPG, il default è bianco | |
+| M3 | Sfondo: Transparent / Color (`<input type="color">`); se l'immagine aperta è un JPG il default è bianco; cambiare formato non tocca una scelta già fatta | |
 | M4 | Stato `state.canvasPad = {t, r, b, l}` in px, `state.canvasLock`, `state.canvasBg = null \| '#rrggbb'`; reset all'apertura di un'immagine e con "Reset all" | |
-| M5 | Ultimo stage della pipeline, dopo `applyResizeToPreview`: canvas `(W+l+r) × (H+t+b)`, `fillRect` col colore oppure `clearRect`, `drawImage` all'offset (l, t), poi su `previewCanvas` | |
+| M5 | Ultimo stage della pipeline: il resize scrive su `stageD`, il padding compone su `previewCanvas` `(W+l+r) × (H+t+b)`, colore solo sulle quattro fasce (gli angoli ruotati restano trasparenti), `drawImage` all'offset (l, t); non applicato in crop mode | |
 | M6 | L'hint "Output W × H px" include il padding | |
 | M7 | Link "Reset canvas" che azzera padding e sfondo | |
-| M8 | Export JPG: prima di `toBlob('image/jpeg')` l'immagine viene composta su un canvas riempito col colore di sfondo (bianco se trasparente); vale anche per gli angoli trasparenti della rotazione | |
+| M8 | Export JPG: in `encodeCanvas`, quando il mime effettivo è `image/jpeg`, l'immagine viene composta su un canvas riempito col colore di sfondo (bianco se trasparente); vale anche per gli angoli trasparenti della rotazione | |
 
 ## Shape selezionata
 
