@@ -125,5 +125,6 @@ Le alternative di X3 cambiano solo il punto d'ingresso. Il meccanismo è lo stes
 
 Deciso il 2026-10-28:
 - R2: il lock è un padding uniforme in px, non proporzionale al rapporto d'aspetto (rivede la prima risposta, opzione (b)); nessuna unità %.
-- X3-B scelta, da confermare vedendola in design: se il bottone senza modalità non si legge, si aggiunge il contorno tratteggiato dell'originale.
+- X3-B scelta e confermata in design (`docs/design/canvas-size.pen`, schermate 1 e 2): bottone Canvas nella rail senza modalità, nessun contorno tratteggiato.
+- Scartato in design: allargare il canvas sulla sorgente, prima della prospettiva, per portare le maniglie fuori dalla foto. Provato con schermate dedicate e tolto: il padding resta sull'output (X1-B).
 

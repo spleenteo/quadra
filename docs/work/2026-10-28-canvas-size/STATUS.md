@@ -1,6 +1,6 @@
 ---
 status: open
-phase: design
+phase: slicing
 slice: null
 step: null
 work: canvas-size
@@ -27,3 +27,4 @@ description: "Allargare il canvas di un'immagine con sfondo trasparente o di col
 - 2026-10-28 — open — home created, profile recorded (tests: none, design: pen) — shaping next — 10 min — n/a
 - 2026-10-28 — shaping — shape selected: rail button "Canvas" on Crop's model, uniform px padding after resize, JPG flattened on white; fidelity check skipped (no frame) — design on quadra.pen next — 25 min — n/a
 - 2026-10-28 — design — opened — panel and placement to draw — — 
+- 2026-10-28 — design — closed: canvas-size.pen with two screens (locked PNG, per-side JPG), library quadra.lib.pen, quadra.pen moved to docs/design/; source-canvas variant tried and dropped; requirement corrections: none — slicing next — 60 min — n/a
