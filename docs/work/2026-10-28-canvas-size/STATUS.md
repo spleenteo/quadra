@@ -1,6 +1,6 @@
 ---
 status: open
-phase: slicing
+phase: impact
 slice: null
 step: null
 work: canvas-size
@@ -19,7 +19,9 @@ description: "Allargare il canvas di un'immagine con sfondo trasparente o di col
 
 ## Slices
 
-- [ ] (defined during slicing)
+- [ ] V1 — Padding uniforme trasparente
+- [ ] V2 — Padding lato per lato
+- [ ] V3 — Sfondo a colore ed export JPG
 
 ## Log
 
@@ -28,3 +30,4 @@ description: "Allargare il canvas di un'immagine con sfondo trasparente o di col
 - 2026-10-28 — shaping — shape selected: rail button "Canvas" on Crop's model, uniform px padding after resize, JPG flattened on white; fidelity check skipped (no frame) — design on quadra.pen next — 25 min — n/a
 - 2026-10-28 — design — opened — panel and placement to draw — — 
 - 2026-10-28 — design — closed: canvas-size.pen with two screens (locked PNG, per-side JPG), library quadra.lib.pen, quadra.pen moved to docs/design/; source-canvas variant tried and dropped; requirement corrections: none — slicing next — 60 min — n/a
+- 2026-10-28 — slicing — 3 slices from parts M1–M8 (breadboard skipped); fidelity check skipped (no frame) — impact next — 10 min — n/a
