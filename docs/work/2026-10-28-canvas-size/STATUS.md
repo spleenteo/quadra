@@ -1,0 +1,27 @@
+---
+status: open
+phase: shaping
+slice: null
+step: null
+work: canvas-size
+stacks: [node]
+base: main
+updated: 2026-10-28
+tags: [work, canvas-size]
+description: "Allargare il canvas di un'immagine con sfondo trasparente o di colore pieno, in modo proporzionale (lock) o con un valore diverso per ogni lato."
+---
+
+# Status — Canvas size
+
+> Update at the **end of every session**: done, remaining, blockers.
+
+**Entry**: product, decided on 2026-10-28 because what the feature does is clear but how it looks and behaves in the UI is still open. Problem clear: no frame, start from shaping. Breadboard skipped: few new interactions, all in existing code. Design phase planned on the existing `quadra.pen`.
+
+## Slices
+
+- [ ] (defined during slicing)
+
+## Log
+
+<!-- date — step — done — remaining — wall-clock — cost -->
+- 2026-10-28 — open — home created, profile recorded (tests: none, design: pen) — shaping next — 10 min — n/a
