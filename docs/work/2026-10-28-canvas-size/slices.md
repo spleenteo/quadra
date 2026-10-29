@@ -56,6 +56,9 @@ Apri un PNG, clicca Canvas nella rail mentre è attivo Perspective, scrivi 40 in
 **Done**
 Sblocca, imposta T=0, B=120, L=R=20: la preview mostra il bordo asimmetrico e l'hint torna. Riblocca: tutti i lati vanno a 0 (il valore di top).
 
+**Deviations found while planning V2**
+- Revisione del piano: con un resize attivo il padding (anche uniforme, già in V1) deformava l'immagine. Deciso: con proporzioni bloccate W resta e H si ricalcola sulle nuove proporzioni (`fitResizeToCanvasPad`); corregge anche V1, come previsto per le fette chiuse.
+
 ## V3 — Sfondo a colore, export JPG, documentazione
 
 **Dentro**
