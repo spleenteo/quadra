@@ -694,6 +694,21 @@ body {
   cursor: default;
 }
 
+.canvas-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+.canvas-sides .control-input-group {
+  min-width: 0;
+}
+
+.lock-btn.active .lock-icon-open,
+.lock-btn:not(.active) .lock-icon-closed {
+  display: none;
+}
+
 .dim-row label {
   color: var(--text-dim);
 }
