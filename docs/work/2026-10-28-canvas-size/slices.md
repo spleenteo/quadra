@@ -86,3 +86,5 @@ Scegli Color e un rosso: il bordo in preview è rosso, e il file salvato in PNG 
 
 **Deviations found while planning V3**
 - La tagline di `README.md` (riga 8) passa a "fix perspective, straighten, crop and frame your photos", come le descrizioni della landing: il mandato nominava solo "What it does" e "How to use".
+- Il formato non cambia mai lo sfondo (preview a scacchiera, file bianco per l'appiattimento): lettura più stretta del mandato, confermata dall'utente.
+- Segment non confrontato con il design (limite pen.dev): stile giudicato alla prova a mano.
