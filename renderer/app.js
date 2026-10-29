@@ -1440,8 +1440,18 @@ function updateUI() {
 }
 
 function encodeCanvas(canvas, mimeType, quality) {
+  let src = canvas;
+  if (mimeType === 'image/jpeg') {
+    src = document.createElement('canvas');
+    src.width = canvas.width;
+    src.height = canvas.height;
+    const ctx = src.getContext('2d');
+    ctx.fillStyle = state.canvasBg ?? '#ffffff';
+    ctx.fillRect(0, 0, src.width, src.height);
+    ctx.drawImage(canvas, 0, 0);
+  }
   return new Promise((resolve, reject) => {
-    canvas.toBlob(
+    src.toBlob(
       (blob) => (blob ? resolve(blob) : reject(new Error('Encoding failed'))),
       mimeType,
       quality,
