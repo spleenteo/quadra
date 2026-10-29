@@ -7,3 +7,4 @@
 - Ogni cambio di `state.canvasPad` passa da `fitResizeToCanvasPad()`: con un resize attivo `applyResizeToPreview` non risincronizza mai `resizeW/H`, quindi un valore sbagliato resta.
 - In crop mode `stageC` è l'immagine intera, non ritagliata: niente calcoli di dimensione dell'output in crop mode; i controlli Canvas sono disabilitati.
 - I passi della prova a mano vanno simulati sullo stato: un'azione che azzera qualcosa (riblocco del lock, Reset all) rende impossibili i passi successivi che lo presuppongono.
+- "Sfondo" per l'utente vuol dire tutto il canvas dietro l'immagine, non solo lo spazio aggiunto: una scelta tecnica che separa le due zone (fasce sì, angoli no) va mostrata a schermo prima di fissarla nel Done.

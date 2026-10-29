@@ -89,3 +89,9 @@ Scegli Color e un rosso: il bordo in preview è rosso, e il file salvato in PNG 
 - Il formato non cambia mai lo sfondo (preview a scacchiera, file bianco per l'appiattimento): lettura più stretta del mandato, confermata dall'utente.
 - Segment non confrontato con il design (limite pen.dev): stile giudicato alla prova a mano.
 - Alla verifica a mano: con padding 100, Color blu e Rotate 36°, gli angoli della rotazione restavano a scacchiera; l'utente si aspettava il blu. Il colore diventa lo sfondo dell'intero canvas (un solo `fillRect`), non più delle sole fasce: anche le zone trasparenti di un PNG prendono il colore, coerente con l'appiattimento JPG.
+
+**V3 — done on 2026-10-29**
+- Cinque task: T1 Segment Transparent / Color e campo colore, T2 stato `canvasBg` con default bianco per i JPG, T3 colore nello stage di padding, T4 appiattimento JPG in `encodeCanvas`, T5 README e landing. Un giro di correzione su T1 (stile CSS su una riga; il commit intermedio `58899b3` è rotto e resta in storia, ruling nel ledger).
+- Alla verifica a mano gli angoli della rotazione restavano a scacchiera con Color attivo: il colore riempie ora l'intero canvas (`a868820`), non solo le fasce.
+- Rulings (dal ledger): task critici rivisti in sessione, diff brevi letti per intero; nessuna revisione finale separata.
+- Done verificato a mano dall'utente il 2026-10-29.
