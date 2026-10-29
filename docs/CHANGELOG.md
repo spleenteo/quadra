@@ -10,7 +10,7 @@ Images can now be given a larger canvas: a border around the picture, with a tra
 - **Padding per side**: padding can be locked to one value for all four sides or set separately for each side with the clickable lock.
 - **Size includes the border**: the padding is applied before the resize, so Size and Output show the final dimensions with the border.
 - **Background color**: the padding can be transparent or filled with a chosen color, which also fills the corners left by rotation.
-- **JPG export**: transparent areas are flattened onto the background color when the image is saved as JPG.
+- **JPG export**: transparent areas are flattened onto the background color when the image is saved as JPG, or onto white when the background is transparent. Behavior change: the corners of a rotated JPG, which used to come out black, now come out white (or in the chosen color).
 - **Crop**: the padding controls are disabled while cropping.
 - **Work**: `canvas-size`
 - **Decision**: [canvas-padding-before-resize](decisions-log/2026-10-29-canvas-padding-before-resize.md)
