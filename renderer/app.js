@@ -21,6 +21,8 @@ const state = {
   tool: 'perspective',     // 'perspective' | 'level'
   linePoints: null,        // [[x1,y1], [x2,y2]] in coord originale
   canvasPad: initialCanvasPad(), // padding in px attorno all'output, dopo il resize
+  canvasLock: true,        // stessi px su tutti i lati
+  canvasOpen: false,       // pannello Canvas aperto dalla rail
 };
 
 const els = {
@@ -61,6 +63,11 @@ const els = {
   cropRemoveBtn: document.getElementById('cropRemoveBtn'),
   cropPanel: document.getElementById('cropPanel'),
   railCropBtn: document.getElementById('railCropBtn'),
+  railCanvasBtn: document.getElementById('railCanvasBtn'),
+  canvasPanel: document.getElementById('canvasPanel'),
+  canvasPadAllInput: document.getElementById('canvasPadAllInput'),
+  canvasLockBtn: document.getElementById('canvasLockBtn'),
+  canvasResetBtn: document.getElementById('canvasResetBtn'),
   statusSource: document.getElementById('statusSource'),
   statusDirty: document.getElementById('statusDirty'),
   cropIdleControls: document.getElementById('cropIdleControls'),
@@ -165,6 +172,8 @@ async function openImageFromBytes(bytes, filePath) {
   state.tool = 'perspective';
   state.linePoints = initialLine(bitmap.width, bitmap.height);
   state.canvasPad = initialCanvasPad();
+  state.canvasLock = true;
+  state.canvasOpen = false;
   state.isDirty = false;
 
   ensurePipeline();
@@ -172,6 +181,7 @@ async function openImageFromBytes(bytes, filePath) {
   syncRotationUI();
   syncSkewUI();
   syncFormatUI();
+  syncCanvasUI();
   scheduleRender();
 
   els.dualCanvas.hidden = false;
@@ -1127,6 +1137,48 @@ els.resizeResetBtn.addEventListener('click', resetResize);
 
 // === END RESIZE ===
 
+// === CANVAS ===
+
+const CANVAS_PAD_MAX = 4000;
+
+function syncCanvasUI() {
+  els.canvasPadAllInput.value = String(state.canvasPad.t);
+}
+
+function hasCanvasPad() {
+  const { t, r, b, l } = state.canvasPad;
+  return t > 0 || r > 0 || b > 0 || l > 0;
+}
+
+function setCanvasPadAll(value, opts = {}) {
+  const v = Math.round(clamp(value, 0, CANVAS_PAD_MAX));
+  state.canvasPad = { t: v, r: v, b: v, l: v };
+  if (!opts.fromInput) syncCanvasUI();
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function resetCanvas() {
+  state.canvasPad = initialCanvasPad();
+  syncCanvasUI();
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function toggleCanvasPanel() {
+  state.canvasOpen = !state.canvasOpen;
+  updateUI();
+}
+
+els.canvasPadAllInput.addEventListener('input', (e) => setCanvasPadAll(e.target.value, { fromInput: true }));
+els.canvasPadAllInput.addEventListener('change', syncCanvasUI);
+els.canvasResetBtn.addEventListener('click', resetCanvas);
+els.railCanvasBtn.addEventListener('click', toggleCanvasPanel);
+
+// === END CANVAS ===
+
 // === FORMAT / QUALITY ===
 
 function syncFormatUI() {
@@ -1167,10 +1219,13 @@ function resetAll() {
   state.cropBackup = null;
   state.resizeActive = false;
   state.canvasPad = initialCanvasPad();
+  state.canvasLock = true;
+  state.canvasOpen = false;
   state.isDirty = true;
   els.cropOverlay.hidden = true;
   syncRotationUI();
   syncSkewUI();
+  syncCanvasUI();
   scheduleRender();
   requestAnimationFrame(updateHandlesPositions);
   updateUI();
@@ -1190,6 +1245,8 @@ function closeImage() {
   state.preBounds = null;
   state.linePoints = null;
   state.canvasPad = initialCanvasPad();
+  state.canvasLock = true;
+  state.canvasOpen = false;
   state.tool = 'perspective';
   state.isDirty = false;
   els.dualCanvas.hidden = true;
@@ -1200,6 +1257,7 @@ function closeImage() {
   els.toolButtons.forEach((b) => b.classList.toggle('active', b.dataset.tool === 'perspective'));
   els.perspectivePanel.hidden = false;
   els.levelPanel.hidden = true;
+  syncCanvasUI();
   updateUI();
 }
 
@@ -1247,6 +1305,13 @@ function updateUI() {
   els.cropRemoveBtn.hidden = !state.cropRect || state.cropMode;
   els.cropIdleControls.hidden = state.cropMode;
   els.cropActiveControls.hidden = !state.cropMode;
+  els.railCanvasBtn.disabled = !hasImage;
+  els.railCanvasBtn.classList.toggle('active', state.canvasOpen);
+  els.canvasPanel.hidden = !state.canvasOpen && !hasCanvasPad();
+  els.canvasPadAllInput.disabled = !hasImage;
+  els.canvasLockBtn.classList.toggle('active', state.canvasLock);
+  els.canvasLockBtn.setAttribute('aria-pressed', String(state.canvasLock));
+  els.canvasResetBtn.disabled = !hasImage || !hasCanvasPad();
   els.resizeWInput.disabled = !hasImage;
   els.resizeHInput.disabled = !hasImage;
   els.resizePctInput.disabled = !hasImage;
