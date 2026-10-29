@@ -44,6 +44,15 @@ updated: 2026-10-29
 **Verified**: `node --input-type=module --check < renderer/app.js` esce 0. A mano (conductor, `npm run dev`), il Done della fetta: PNG aperto, con Perspective attivo clic su Canvas (attivi tutti e due), 40 in All sides → bordo a scacchiera di 40 px, hint W+80 × H+80; resize al 50% → bordo sempre 40; Edit crop → rettangolo allineato all'immagine, Confirm → bordo di nuovo; partendo da un PNG opaco, Save As `.png` e `.webp` → `sips -g pixelWidth -g pixelHeight <file>` dà le dimensioni dell'hint, il pixel (0,0) ha alfa 0 (letto con uno script Python/PIL dallo scratchpad) e, riaperto in Quadra, la fascia di 40 px mostra la scacchiera; Reset canvas e Reset all tolgono il bordo; dopo Close il bottone non è `active` e il pannello è nascosto; riaprendo il campo vale 0.
 **Done**: il Done di V1 in slices.md passa a mano.
 
+### T4 — Rendere visibile il canvas nella preview · aggiunto alla verifica a mano
+**Perché**: alla prova a mano il padding non si vedeva. La preview si adatta al riquadro (`max-width/height`), e la scacchiera (`#2a2a2a` su trasparente, `styles.css:241-252`) sopra lo sfondo `--bg-canvas` (`#141414`) fa confondere il bordo trasparente con lo spazio attorno.
+**What**: in `renderer/styles.css`:
+- `.canvas-container canvas`: aggiungere `outline: 1px solid var(--border);` e schiarire la scacchiera: colore di base `background-color: #1f1f1f;` e quadrati `#333` al posto di `#2a2a2a` (stesse dimensioni e posizioni). Vale per tutte e due le canvas, Original e Preview.
+- Linea di separazione verticale tra Original e Preview, a metà del `gap: 16px` di `.dual-canvas` (`styles.css:203`), senza cambiare il layout: `.canvas-wrap + .canvas-wrap { position: relative; }` e `.canvas-wrap + .canvas-wrap::before { content: ''; position: absolute; left: -8px; top: 0; bottom: 0; width: 1px; background: var(--border); pointer-events: none; }`.
+**Files**: `renderer/styles.css`
+**Verified**: A mano (conductor, `npm run dev`, nessuna porta): il contorno della preview si vede; con 40 px di padding l'immagine appare rientrata nel contorno e il bordo mostra la scacchiera; la linea grigia divide Original e Preview, senza spostare nulla.
+**Done**: il padding si vede nella preview.
+
 ## Order
 
 - T1 e T2 in parallelo (file separati).
