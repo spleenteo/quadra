@@ -20,7 +20,7 @@ const state = {
   preBounds: null,         // bounding box dell'originale post-rot/skew
   tool: 'perspective',     // 'perspective' | 'level'
   linePoints: null,        // [[x1,y1], [x2,y2]] in coord originale
-  canvasPad: initialCanvasPad(), // padding in px attorno all'output, dopo il resize
+  canvasPad: initialCanvasPad(), // padding in px attorno all'immagine, prima del resize
   canvasLock: true,        // stessi px su tutti i lati
   canvasOpen: false,       // pannello Canvas aperto dalla rail
 };
@@ -412,11 +412,11 @@ function runPipeline() {
   // Step 4: crop stageB → stageC
   applyCropToStageC();
 
-  // Step 5: resize stageC → stageD
-  applyResizeToStageD();
+  // Step 5: padding stageC → stageD
+  applyCanvasPadToStageD();
 
-  // Step 6: padding stageD → previewCanvas
-  applyCanvasPadToPreview();
+  // Step 6: resize stageD → previewCanvas
+  applyResizeToPreview();
 }
 
 function applyRotateSkewToStageB(stageW, stageH) {
@@ -497,9 +497,23 @@ function applyCropToStageC() {
   ctx.drawImage(stageB, sx, sy, sw, sh, 0, 0, sw, sh);
 }
 
-function applyResizeToStageD() {
-  const naturalW = stageC.width;
-  const naturalH = stageC.height;
+function applyCanvasPadToStageD() {
+  // In modalità editing crop il preview è l'immagine intera: niente padding.
+  const { t, r, b, l } = state.cropMode ? initialCanvasPad() : state.canvasPad;
+  const outW = stageC.width + l + r;
+  const outH = stageC.height + t + b;
+
+  const dst = stageD;
+  dst.width = outW;
+  dst.height = outH;
+  const ctx = dst.getContext('2d');
+  ctx.clearRect(0, 0, outW, outH);
+  ctx.drawImage(stageC, l, t);
+}
+
+function applyResizeToPreview() {
+  const naturalW = stageD.width;
+  const naturalH = stageD.height;
 
   if (!state.resizeActive) {
     state.resizeW = naturalW;
@@ -510,30 +524,16 @@ function applyResizeToStageD() {
   const targetW = Math.max(1, Math.floor(state.resizeActive ? state.resizeW : naturalW));
   const targetH = Math.max(1, Math.floor(state.resizeActive ? state.resizeH : naturalH));
 
-  const dst = stageD;
+  const dst = els.previewCanvas;
   dst.width = targetW;
   dst.height = targetH;
   const ctx = dst.getContext('2d');
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
   ctx.clearRect(0, 0, targetW, targetH);
-  ctx.drawImage(stageC, 0, 0, targetW, targetH);
-}
+  ctx.drawImage(stageD, 0, 0, targetW, targetH);
 
-function applyCanvasPadToPreview() {
-  // In modalità editing crop il preview è l'immagine intera: niente padding.
-  const { t, r, b, l } = state.cropMode ? initialCanvasPad() : state.canvasPad;
-  const outW = stageD.width + l + r;
-  const outH = stageD.height + t + b;
-
-  const dst = els.previewCanvas;
-  dst.width = outW;
-  dst.height = outH;
-  const ctx = dst.getContext('2d');
-  ctx.clearRect(0, 0, outW, outH);
-  ctx.drawImage(stageD, l, t);
-
-  els.resizeHint.textContent = `Output ${outW} × ${outH} px`;
+  els.resizeHint.textContent = `Output ${targetW} × ${targetH} px`;
 }
 
 function updateHandlesPositions() {
@@ -1065,7 +1065,7 @@ els.resetLineBtn.addEventListener('click', resetLine);
 
 // === RESIZE ===
 
-function syncResizeUI(naturalW = stageC.width, naturalH = stageC.height) {
+function syncResizeUI(naturalW = stageD.width, naturalH = stageD.height) {
   els.resizeWInput.value = String(Math.round(state.resizeW || naturalW));
   els.resizeHInput.value = String(Math.round(state.resizeH || naturalH));
   const pct = naturalW > 0 ? ((state.resizeW || naturalW) / naturalW) * 100 : 100;
@@ -1074,7 +1074,7 @@ function syncResizeUI(naturalW = stageC.width, naturalH = stageC.height) {
 }
 
 function naturalAspect() {
-  return stageC.width > 0 && stageC.height > 0 ? stageC.width / stageC.height : 1;
+  return stageD.width > 0 && stageD.height > 0 ? stageD.width / stageD.height : 1;
 }
 
 function setResizeFromW(value) {
@@ -1102,8 +1102,8 @@ function setResizeFromH(value) {
 function setResizeFromPct(value) {
   const pct = clamp(value, 0.1, 1000);
   state.resizeActive = true;
-  state.resizeW = Math.max(1, Math.round((stageC.width * pct) / 100));
-  state.resizeH = Math.max(1, Math.round((stageC.height * pct) / 100));
+  state.resizeW = Math.max(1, Math.round((stageD.width * pct) / 100));
+  state.resizeH = Math.max(1, Math.round((stageD.height * pct) / 100));
   state.isDirty = true;
   syncResizeUI();
   scheduleRender();
@@ -1122,8 +1122,8 @@ function setLockAspect(checked) {
 
 function resetResize() {
   state.resizeActive = false;
-  state.resizeW = stageC.width;
-  state.resizeH = stageC.height;
+  state.resizeW = stageD.width;
+  state.resizeH = stageD.height;
   state.isDirty = true;
   scheduleRender();
   updateUI();
