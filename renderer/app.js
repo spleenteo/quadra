@@ -94,6 +94,7 @@ const SUPPORTED_MIME = ['image/png', 'image/jpeg', 'image/webp'];
 const stageA = document.createElement('canvas');
 const stageB = document.createElement('canvas');
 const stageC = document.createElement('canvas');
+const stageD = document.createElement('canvas');
 let pipeline = null;
 let renderQueued = false;
 
@@ -395,8 +396,11 @@ function runPipeline() {
   // Step 4: crop stageB → stageC
   applyCropToStageC();
 
-  // Step 5: resize stageC → previewCanvas
-  applyResizeToPreview();
+  // Step 5: resize stageC → stageD
+  applyResizeToStageD();
+
+  // Step 6: padding stageD → previewCanvas
+  applyCanvasPadToPreview();
 }
 
 function applyRotateSkewToStageB(stageW, stageH) {
@@ -477,7 +481,7 @@ function applyCropToStageC() {
   ctx.drawImage(stageB, sx, sy, sw, sh, 0, 0, sw, sh);
 }
 
-function applyResizeToPreview() {
+function applyResizeToStageD() {
   const naturalW = stageC.width;
   const naturalH = stageC.height;
 
@@ -490,7 +494,7 @@ function applyResizeToPreview() {
   const targetW = Math.max(1, Math.floor(state.resizeActive ? state.resizeW : naturalW));
   const targetH = Math.max(1, Math.floor(state.resizeActive ? state.resizeH : naturalH));
 
-  const dst = els.previewCanvas;
+  const dst = stageD;
   dst.width = targetW;
   dst.height = targetH;
   const ctx = dst.getContext('2d');
@@ -498,8 +502,22 @@ function applyResizeToPreview() {
   ctx.imageSmoothingQuality = 'high';
   ctx.clearRect(0, 0, targetW, targetH);
   ctx.drawImage(stageC, 0, 0, targetW, targetH);
+}
 
-  els.resizeHint.textContent = `Output ${targetW} × ${targetH} px`;
+function applyCanvasPadToPreview() {
+  // In modalità editing crop il preview è l'immagine intera: niente padding.
+  const t = 0, r = 0, b = 0, l = 0;
+  const outW = stageD.width + l + r;
+  const outH = stageD.height + t + b;
+
+  const dst = els.previewCanvas;
+  dst.width = outW;
+  dst.height = outH;
+  const ctx = dst.getContext('2d');
+  ctx.clearRect(0, 0, outW, outH);
+  ctx.drawImage(stageD, l, t);
+
+  els.resizeHint.textContent = `Output ${outW} × ${outH} px`;
 }
 
 function updateHandlesPositions() {
