@@ -644,6 +644,39 @@ body {
   margin: 0;
 }
 
+.lock-btn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+}
+
+.lock-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lock-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.lock-btn:disabled {
+  cursor: default;
+}
+
 .dim-row label {
   color: var(--text-dim);
 }
