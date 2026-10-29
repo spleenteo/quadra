@@ -517,6 +517,13 @@ function applyCanvasPadToStageD() {
   dst.height = outH;
   const ctx = dst.getContext('2d');
   ctx.clearRect(0, 0, outW, outH);
+  if (state.canvasBg) {
+    ctx.fillStyle = state.canvasBg;
+    ctx.fillRect(0, 0, outW, t);
+    ctx.fillRect(0, outH - b, outW, b);
+    ctx.fillRect(0, t, l, stageC.height);
+    ctx.fillRect(outW - r, t, r, stageC.height);
+  }
   ctx.drawImage(stageC, l, t);
 }
 
