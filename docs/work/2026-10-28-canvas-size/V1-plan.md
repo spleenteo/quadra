@@ -53,6 +53,17 @@ updated: 2026-10-29
 **Verified**: A mano (conductor, `npm run dev`, nessuna porta): il contorno della preview si vede; con 40 px di padding l'immagine appare rientrata nel contorno e il bordo mostra la scacchiera; la linea grigia divide Original e Preview, senza spostare nulla.
 **Done**: il padding si vede nella preview.
 
+### T5 — Padding prima del resize (X1-A) · critical · depends on: T1, T3
+**Perché**: alla verifica a mano Size restava a 500 mentre il file era 580; deciso X1-A (shaping, "Deciso il 2026-10-29"): Size include il bordo.
+**What**: in `renderer/app.js`:
+- `applyCanvasPadToPreview` diventa `applyCanvasPadToStageD`: legge `stageC`, scrive `stageD` a `(stageC.width+l+r) × (stageC.height+t+b)`, `clearRect`, `drawImage(stageC, l, t)`; niente hint. Il commento sul crop mode resta.
+- `applyResizeToStageD` torna `applyResizeToPreview`: `naturalW/H = stageD.width/height`, scrive su `els.previewCanvas` con `drawImage(stageD, 0, 0, targetW, targetH)`, e scrive di nuovo l'hint `Output ${targetW} × ${targetH} px` (come prima di T1).
+- `runPipeline`: Step 5 `padding stageC → stageD` (`applyCanvasPadToStageD()`), Step 6 `resize stageD → previewCanvas` (`applyResizeToPreview()`).
+- Il pannello Size legge `stageD` al posto di `stageC`: default di `syncResizeUI`, `naturalAspect`, `setResizePct`, il blocco del lock proporzioni e `resetResize` (oggi `app.js:1068-1126`). Il crop resta su `stageB`/`stageC`.
+**Files**: `renderer/app.js`
+**Verified**: `node --input-type=module --check < renderer/app.js` esce 0; `grep -n "stageC" renderer/app.js` non dà più righe nella sezione RESIZE; `grep -c "applyResizeToStageD\|applyCanvasPadToPreview" renderer/app.js` dà 0. A mano (conductor, `npm run dev`): PNG 600×400, 40 in All sides → Size e hint 680 × 480; resize 50% → 340 × 240 e bordo di 20 px; Reset size, poi W = 600 → immagine stretta dentro, bordo visibile; Edit crop → nessun bordo, rettangolo allineato.
+**Done**: Size segue il canvas.
+
 ## Order
 
 - T1 e T2 in parallelo (file separati).
@@ -60,4 +71,4 @@ updated: 2026-10-29
 
 ## Deviations from the mandate
 
-- `applyResizeToPreview` rinominata `applyResizeToStageD`: il mandato la nomina col vecchio nome, ma dopo la modifica non scrive più sulla preview.
+- `applyResizeToPreview` rinominata `applyResizeToStageD` in T1; con X1-A (T5) torna `applyResizeToPreview` e lo stage di padding si chiama `applyCanvasPadToStageD`.

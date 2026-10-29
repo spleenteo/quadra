@@ -20,16 +20,16 @@ Shape selezionata in `shaping.md`: M1–M8 + X1-B + X2-B + X3-B. Breadboard salt
 - Sezione `canvasPanel` nella sidebar destra, accanto a `cropPanel` (`index.html:113`): visibile se `state.canvasOpen` o se c'è padding (stessa regola di `app.js:1220`). Contiene il lock (attivo, fisso in questa fetta), il campo "All sides" in px (`min="0"`, intero, con un massimo per lato sul modello del clamp del resize, `app.js:1047`) e il link "Reset canvas".
 - Stato `state.canvasPad = {t, r, b, l}`, `state.canvasLock = true`, `state.canvasOpen = false` (`app.js:3`). Azzerato in tre punti: apertura (`openImageFromBytes`, `app.js:140`, che copre Cmd+O, Finder, incolla e drop), `resetAll` (`app.js:1135`, anche dal menu Reset All) e `closeImage` (`app.js:1157`).
 - Ogni modifica del padding e "Reset canvas" seguono il pattern esistente: `state.isDirty = true`, `scheduleRender()`, `updateUI()` (`app.js:601-603`).
-- Pipeline (`runPipeline`, `app.js:377`): `applyResizeToPreview` (`app.js:480`) scrive su un canvas intermedio `stageD` invece che su `previewCanvas`; un nuovo stage di padding dimensiona `previewCanvas` a `(W+l+r) × (H+t+b)`, `clearRect`, `drawImage(stageD, l, t)`. `syncResizeUI` continua a ricevere le dimensioni senza padding.
+- Pipeline (`runPipeline`, `app.js:377`): lo stage di padding sta tra crop e resize (X1-A, deciso alla verifica a mano): compone `stageC` su `stageD` `(W+l+r) × (H+t+b)`, `clearRect`, `drawImage(stageC, l, t)`; il resize legge `stageD` e scrive su `previewCanvas`. Tutto il pannello Size (W/H/%, proporzioni, Reset size) ragiona sulle dimensioni di `stageD`, cioè con il bordo.
 - In crop mode (`state.cropMode`) lo stage di padding non applica il bordo, come `applyCropToStageC` già salta il crop (`app.js:458`): l'overlay del crop (`getPreviewDisplayRect`, `app.js:669`) resta allineato all'immagine.
-- L'hint "Output W × H px" è scritto dallo stage di padding (non più da `applyResizeToPreview`, `app.js:502`) e include il padding. I campi W/H del pannello Size restano senza padding (X1-B).
+- Size e l'hint "Output W × H px" includono il padding. Senza resize attivo Size segue il bordo (espandere); con un resize già fissato il padding stringe l'immagine dentro quella misura (contrarre).
 
 **Fuori**
 - Campi T/R/B/L e sblocco del lock (V2). Sfondo a colore, appiattimento JPG (V3): in questa fetta un JPG con padding esce con il bordo nero, come oggi gli angoli ruotati; le prove si fanno su PNG e WebP.
 - Metadati EXIF/ICC: invariati, già oggi non conservati (`createImageBitmap` in decodifica, `toBlob` in codifica).
 
 **Done**
-Apri un PNG, clicca Canvas nella rail mentre è attivo Perspective, scrivi 40 in All sides: la preview mostra un bordo di scacchiera di 40 px per lato, l'hint dice W+80 × H+80. Imposta un resize al 50%: il bordo resta 40 px. Con 40 px di padding apri Edit crop: il rettangolo è allineato all'immagine (senza bordo); conferma: il bordo torna, 40 px. Save As PNG e Save As WebP: i file hanno esattamente quelle dimensioni e il bordo trasparente. "Reset canvas" toglie il bordo; "Reset all" anche; dopo Close il pannello e il bottone non restano attivi.
+Apri un PNG, clicca Canvas nella rail mentre è attivo Perspective, scrivi 40 in All sides: la preview mostra un bordo di scacchiera di 40 px per lato, Size e l'hint dicono W+80 × H+80. Imposta un resize al 50%: tutto si dimezza, il bordo diventa 20 px. Reset size, poi rimetti W alla larghezza originale: l'immagine si stringe dentro e il bordo resta. Con 40 px di padding apri Edit crop: il rettangolo è allineato all'immagine (senza bordo); conferma: il bordo torna, 40 px. Save As PNG e Save As WebP: i file hanno esattamente quelle dimensioni e il bordo trasparente. "Reset canvas" toglie il bordo; "Reset all" anche; dopo Close il pannello e il bottone non restano attivi.
 
 **Gotcha**
 - Il crop è normalizzato su `stageB` (`app.js:466-470`), a monte del padding: non si sposta quando cambia il padding.
@@ -37,6 +37,7 @@ Apri un PNG, clicca Canvas nella rail mentre è attivo Perspective, scrivi 40 in
 
 **Deviations found while planning V1**
 - `applyResizeToPreview` rinominata `applyResizeToStageD`: non scrive più sulla preview, il nome segue `applyRotateSkewToStageB` / `applyCropToStageC`.
+- Alla verifica a mano: padding poco visibile in preview → T4 (contorno, scacchiera più chiara, linea tra Original e Preview); Size non includeva il bordo → X1-B sostituita da X1-A, T5 (padding prima del resize, `applyCanvasPadToStageD` + `applyResizeToPreview`).
 
 ## V2 — Padding lato per lato
 

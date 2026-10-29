@@ -33,7 +33,7 @@ Nota emersa leggendo il codice: un JPG ruotato oggi ha già gli angoli trasparen
 | R2 | Con il lock, un solo valore in px allarga tutti i lati della stessa quantità, come un padding uniforme | Must-have |
 | R3 | Senza lock, ogni lato (top, right, bottom, left) ha un valore indipendente | Must-have |
 | R4 | L'utente vede la dimensione finale in pixel prima di salvare | Must-have |
-| R5 | La quantità aggiunta corrisponde a pixel esatti nel file salvato | Must-have |
+| R5 | Con Size al 100% la quantità aggiunta corrisponde a pixel esatti nel file salvato; un resize la scala insieme all'immagine | Must-have |
 | R6 | Salvare in JPG un canvas trasparente non produce un risultato inatteso (es. nero): in JPG lo sfondo è bianco di default | Must-have |
 | R7 | Si combina con prospettiva, rotazione, crop e resize senza rompere quei flussi | Must-have |
 | R8 | Si azzera con un solo gesto, come "Reset size" e "Remove crop" | Must-have |
@@ -54,11 +54,11 @@ Nota emersa leggendo il codice: un JPG ruotato oggi ha già gli angoli trasparen
 | Req | Requirement | Status | X1-A | X1-B |
 |-----|-------------|--------|------|------|
 | R4 | L'utente vede la dimensione finale in pixel prima di salvare | Must-have | ✅ | ✅ |
-| R5 | La quantità aggiunta corrisponde a pixel esatti nel file salvato | Must-have | ❌ | ✅ |
+| R5 | Con Size al 100% la quantità aggiunta corrisponde a pixel esatti nel file salvato; un resize la scala insieme all'immagine | Must-have | ✅ | ✅ |
 | R7 | Si combina con prospettiva, rotazione, crop e resize senza rompere quei flussi | Must-have | ✅ | ✅ |
 
 **Notes:**
-- X1-A fallisce R5: con un resize al 50%, 100 px di margine diventano 50.
+- X1-A: con un resize al 50%, 100 px di margine diventano 50. La prima formulazione di R5 (pixel esatti sempre) la faceva fallire; R5 è stata riscritta il 2026-10-29 (vedi sotto).
 - X1-B: il Size panel continua a parlare dell'immagine; il canvas aggiunge attorno. La dimensione finale va mostrata (hint "Output W × H px", che esiste già).
 
 ### X2: JPG e trasparenza
@@ -114,17 +114,19 @@ Le alternative di X3 cambiano solo il punto d'ingresso. Il meccanismo è lo stes
 | M2 | Lock: il valore di "All sides" va identico su t, r, b, l. Togliendo il lock i quattro campi partono da quel valore; rimettendolo, "All sides" prende il valore di top e lo ricopia sugli altri | |
 | M3 | Sfondo: Transparent / Color (`<input type="color">`); se l'immagine aperta è un JPG il default è bianco; cambiare formato non tocca una scelta già fatta | |
 | M4 | Stato `state.canvasPad = {t, r, b, l}` in px, `state.canvasLock`, `state.canvasBg = null \| '#rrggbb'`; reset all'apertura di un'immagine e con "Reset all" | |
-| M5 | Ultimo stage della pipeline: il resize scrive su `stageD`, il padding compone su `previewCanvas` `(W+l+r) × (H+t+b)`, colore solo sulle quattro fasce (gli angoli ruotati restano trasparenti), `drawImage` all'offset (l, t); non applicato in crop mode | |
-| M6 | L'hint "Output W × H px" include il padding | |
+| M5 | Stage tra crop e resize: il padding compone `stageC` su `stageD` `(W+l+r) × (H+t+b)`, colore solo sulle quattro fasce (gli angoli ruotati restano trasparenti), `drawImage` all'offset (l, t); il resize legge `stageD`, quindi Size mostra le dimensioni con il bordo; non applicato in crop mode | |
+| M6 | Size (W/H/%) e l'hint "Output W × H px" includono il padding | |
 | M7 | Link "Reset canvas" che azzera padding e sfondo | |
 | M8 | Export JPG: in `encodeCanvas`, quando il mime effettivo è `image/jpeg`, l'immagine viene composta su un canvas riempito col colore di sfondo (bianco se trasparente); vale anche per gli angoli trasparenti della rotazione | |
 
 ## Shape selezionata
 
-**Meccanismo M1–M8 + X1-B + X2-B + X3-B**: bottone "Canvas" nella rail sul modello di Crop, pannello nella sidebar destra, padding in px applicato dopo il resize, JPG appiattito sul colore di sfondo (bianco di default).
+**Meccanismo M1–M8 + X1-A + X2-B + X3-B**: bottone "Canvas" nella rail sul modello di Crop, pannello nella sidebar destra, padding in px applicato tra crop e resize (Size lo include), JPG appiattito sul colore di sfondo (bianco di default).
 
 Deciso il 2026-10-28:
 - R2: il lock è un padding uniforme in px, non proporzionale al rapporto d'aspetto (rivede la prima risposta, opzione (b)); nessuna unità %.
 - X3-B scelta e confermata in design (`docs/design/canvas-size.pen`, schermate 1 e 2): bottone Canvas nella rail senza modalità, nessun contorno tratteggiato.
-- Scartato in design: allargare il canvas sulla sorgente, prima della prospettiva, per portare le maniglie fuori dalla foto. Provato con schermate dedicate e tolto: il padding resta sull'output (X1-B).
+- Scartato in design: allargare il canvas sulla sorgente, prima della prospettiva, per portare le maniglie fuori dalla foto. Provato con schermate dedicate e tolto: il padding resta sull'output.
 
+Deciso il 2026-10-29, alla verifica a mano di V1:
+- X1-B → **X1-A**. Con il padding dopo il resize, Size restava a 500 mentre il file era 580: l'utente si aspettava che il canvas espandesse l'immagine e aggiornasse Size. Con X1-A Size segue il bordo (espandere); rimettendo Size alla misura di prima, immagine e bordo vengono scalati dentro (contrarre). Nessuna opzione espandi/contrai per ora: se manca, una fetta successiva. R5 riscritta di conseguenza.
