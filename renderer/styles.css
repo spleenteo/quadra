@@ -707,6 +707,16 @@ body {
 .lock-btn.active .lock-icon-open,
 .lock-btn:not(.active) .lock-icon-closed {
   display: none;
+
+.bg-segment { display: flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.bg-segment-btn { flex: 1; background: transparent; border: none; color: var(--text-dim); font: inherit; font-size: 11px; padding: 5px 0; cursor: pointer; }
+.bg-segment-btn + .bg-segment-btn { border-left: 1px solid var(--border); }
+.bg-segment-btn.active { background: var(--accent); color: #fff; }
+.bg-segment-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.bg-color-row input[type="color"] { display: block; width: 100%; height: 26px; padding: 0; background: transparent; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; }
+.bg-color-row input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+.bg-color-row input[type="color"]::-webkit-color-swatch { border: none; border-radius: 2px; }
+.bg-color-row input[type="color"]:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
 .dim-row label {
