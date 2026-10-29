@@ -1,0 +1,24 @@
+# Ledger — V3
+env: (force/model; empty = unset)
+- T5 · flow:executor · definition: mid · DONE · 47f3462
+- T5 review · conductor, in session · pass — README tagline, list item, How to use step, landing descriptions (3), feature card and JPG note match T5; feature card follows the existing markup
+- T5: complete
+- T1 · flow:executor · definition: mid · DONE_WITH_CONCERNS · 3881e81 30c9f8b (second commit closes a rule the first insert split)
+- T1 review · conductor, in session · low: CSS rules and markup on single lines, unlike the file → fix round 1 sent
+- T1 fix round 1 · flow:executor (same) · DONE_WITH_CONCERNS · 58899b3 71857ca — 58899b3 duplicated ~170 lines of styles.css by mistake, 71857ca restores and reformats
+- T1 fix review · conductor, in session · pass — net diff 30c9f8b..71857ca on renderer/ is only the reformat (9 one-line rules expanded, markup one element per line); braces balanced; no duplicated rules left
+- Ruling: history keeps the broken intermediate commit 58899b3 (no rewrite of local history unasked) — cost if wrong: one bad commit to skip when bisecting
+- T1: complete
+- T2 · flow:executor · definition: mid · DONE · ee143dd
+- T2 review · conductor, in session · pass — state, els, resetCanvasBg in open/resetAll/closeImage/resetCanvas (5 occurrences), setCanvasBg with isDirty, listeners, updateUI rules (panel, segment, swatch, reset) match T2; format untouched in setFormat/saveAs
+- Ruling: T2 (critical) reviewed in session — 40-line diff read in full, no pipeline or export change — cost if wrong: caught at the manual check
+- T2: complete
+- T3 · flow:executor · definition: mid · DONE · 6bd214d
+- T3 review · conductor, in session · pass — four fillRect on the bands only, between clearRect and drawImage, at stageD resolution; zero-size in crop mode
+- Ruling: T3 (critical) reviewed in session — 7-line diff — cost if wrong: caught at the manual check
+- T3: complete
+- T4 · flow:executor · definition: mid · DONE · 942e7b4
+- T4 review · conductor, in session · pass — flatten only for image/jpeg, on canvasBg or white, in encodeCanvas (used only by saveCurrent/saveAs); PNG/WebP untouched
+- Ruling: T4 (critical) reviewed in session — 10-line diff — cost if wrong: caught at the manual check on saved files
+- T4: complete
+- Ruling: no separate final review — five small tasks each read in full; the risky parts (band fill, flatten) are a few lines — cost if wrong: a cross-task issue surfaces at the manual check
