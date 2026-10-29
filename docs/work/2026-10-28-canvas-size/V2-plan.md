@@ -41,11 +41,11 @@ updated: 2026-10-29
 **Verified**: `node --input-type=module --check < renderer/app.js` esce 0; `grep -n "canvasLockBtn.addEventListener" renderer/app.js` dà 1 riga. A mano (conductor, `npm run dev`), con un PNG 600×400:
 1. Canvas, All sides 40: Size W 680 H 480, hint `Output 680 × 480 px`, bordo a scacchiera uguale sui quattro lati.
 2. Clic sul lock: l'icona diventa `lock-open` in grigio, All sides si disabilita, compare la griglia 2×2 con T R B L tutti a 40.
-3. T=0, B=120, L=20, R=20: la preview mostra l'immagine attaccata al bordo superiore della canvas, 120 px di scacchiera sotto e 20 ai lati; Size W **640** H **520**; hint `Output 640 × 520 px`. Save As `.png` → `sips -g pixelWidth -g pixelHeight <file>` dà 640 × 520; dopo il salvataggio il punto "modificato" è spento; clic sul lock due volte (sblocca di nuovo per proseguire): il punto si accende. Scrivendo in T, All sides cambia subito.
-4. Edit crop: nessun bordo, rettangolo allineato all'immagine; Cancel: il bordo asimmetrico torna.
-5. Clic sul lock: icona `lock` in accent, griglia nascosta, All sides 0, nessun bordo, Size 600 × 400, hint `Output 600 × 400 px`.
+3. T=0, B=120, L=20, R=20: la preview mostra l'immagine attaccata al bordo superiore della canvas, 120 px di scacchiera sotto e 20 ai lati; Size W **640** H **520**; hint `Output 640 × 520 px`. Save As `.png` → `sips -g pixelWidth -g pixelHeight <file>` dà 640 × 520; dopo il salvataggio il punto "modificato" è spento. Scrivendo in T (riscrivi 0), All sides cambia subito e il punto si accende.
+4. Edit crop: nessun bordo, rettangolo allineato all'immagine, campi del pannello Canvas disabilitati; Cancel: il bordo asimmetrico torna e i campi si riabilitano.
+5. Salva di nuovo (punto spento), poi clic sul lock: il punto si accende; icona `lock` in accent, griglia nascosta, All sides 0, nessun bordo, Size 600 × 400, hint `Output 600 × 400 px`.
 6. Sblocca, T=0, B=120, L=R=20 (Size 640 × 520), proporzioni bloccate, resize al 50% (320 × 260); poi L=100: W resta 320, H diventa 231 (720 × 520 in proporzione), l'immagine non è deformata. Reset size.
-7. Sblocca, B=50, poi Reset all, clic su Canvas: lock chiuso, griglia nascosta, nessun bordo. Sblocca, poi Close, riapri e clic su Canvas: lock chiuso, All sides 0.
+7. (Già sbloccato) B=50, poi Reset all, clic su Canvas: lock chiuso, griglia nascosta, nessun bordo. Sblocca, poi Close, riapri e clic su Canvas: lock chiuso, All sides 0.
 **Done**: il Done di V2 in slices.md passa a schermo: bordo asimmetrico visibile in preview, Size 640 × 520 con T=0, B=120, L=R=20; al riblocco tutti i lati a 0.
 
 ## Order
