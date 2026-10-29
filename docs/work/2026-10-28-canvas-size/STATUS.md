@@ -1,8 +1,7 @@
 ---
-status: open
-phase: slice
+status: closed
+phase: done
 slice: V3
-step: closing
 work: canvas-size
 stacks: [node]
 base: main
@@ -35,3 +34,4 @@ description: "Allargare il canvas di un'immagine con sfondo trasparente o di col
 - 2026-10-29 — V1 closed — 5 tasks (2 added at the manual check: preview visibility, X1-B → X1-A); Done verified by the user; lessons.md created — V2 plan next — ~90 min — n/a
 - 2026-10-29 — V2 closed — 2 tasks + 1 fix round (padding controls disabled in crop mode); resize keeps W and refits H on padding change; Done verified by the user — V3 plan next — ~45 min — n/a
 - 2026-10-29 — V3 closed — 5 tasks + 1 fix round (T1 styles) + 1 fix at the manual check (background fills the whole canvas, rotation corners included); Done verified by the user — work close next (changelog, version, merge) — ~60 min — n/a
+- 2026-10-29 — work closed — all slices done — changelog, version, merge next — — n/a
