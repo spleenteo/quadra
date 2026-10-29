@@ -67,6 +67,8 @@ const els = {
   canvasPanel: document.getElementById('canvasPanel'),
   canvasPadAllInput: document.getElementById('canvasPadAllInput'),
   canvasLockBtn: document.getElementById('canvasLockBtn'),
+  canvasSides: document.getElementById('canvasSides'),
+  canvasPadSideInputs: document.querySelectorAll('#canvasSides input[data-side]'),
   canvasResetBtn: document.getElementById('canvasResetBtn'),
   statusSource: document.getElementById('statusSource'),
   statusDirty: document.getElementById('statusDirty'),
@@ -1143,6 +1145,21 @@ const CANVAS_PAD_MAX = 4000;
 
 function syncCanvasUI() {
   els.canvasPadAllInput.value = String(state.canvasPad.t);
+  els.canvasPadSideInputs.forEach((input) => {
+    input.value = String(state.canvasPad[input.dataset.side]);
+  });
+}
+
+// Con proporzioni bloccate e resize attivo, l'altezza segue l'aspetto della
+// canvas con padding. stageD ha ancora la dimensione vecchia fino al prossimo
+// render, quindi la dimensione naturale si passa esplicita.
+function fitResizeToCanvasPad() {
+  if (!state.resizeActive || !state.lockAspect) return;
+  const { t, r, b, l } = state.canvasPad;
+  const paddedW = stageC.width + l + r;
+  const paddedH = stageC.height + t + b;
+  state.resizeH = Math.max(1, Math.round(state.resizeW / (paddedW / paddedH)));
+  syncResizeUI(paddedW, paddedH);
 }
 
 function hasCanvasPad() {
@@ -1153,7 +1170,32 @@ function hasCanvasPad() {
 function setCanvasPadAll(value, opts = {}) {
   const v = Math.round(clamp(value, 0, CANVAS_PAD_MAX));
   state.canvasPad = { t: v, r: v, b: v, l: v };
+  fitResizeToCanvasPad();
   if (!opts.fromInput) syncCanvasUI();
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function setCanvasPadSide(side, value, opts = {}) {
+  const v = Math.round(clamp(value, 0, CANVAS_PAD_MAX));
+  state.canvasPad = { ...state.canvasPad, [side]: v };
+  fitResizeToCanvasPad();
+  if (!opts.fromInput) syncCanvasUI();
+  else if (side === 't') els.canvasPadAllInput.value = String(v);
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function setCanvasLock(locked) {
+  state.canvasLock = !!locked;
+  if (state.canvasLock) {
+    const v = state.canvasPad.t;
+    state.canvasPad = { t: v, r: v, b: v, l: v };
+    fitResizeToCanvasPad();
+  }
+  syncCanvasUI();
   state.isDirty = true;
   scheduleRender();
   updateUI();
@@ -1161,6 +1203,7 @@ function setCanvasPadAll(value, opts = {}) {
 
 function resetCanvas() {
   state.canvasPad = initialCanvasPad();
+  fitResizeToCanvasPad();
   syncCanvasUI();
   state.isDirty = true;
   scheduleRender();
@@ -1175,6 +1218,11 @@ function toggleCanvasPanel() {
 els.canvasPadAllInput.addEventListener('input', (e) => setCanvasPadAll(e.target.value, { fromInput: true }));
 els.canvasPadAllInput.addEventListener('change', syncCanvasUI);
 els.canvasResetBtn.addEventListener('click', resetCanvas);
+els.canvasLockBtn.addEventListener('click', () => setCanvasLock(!state.canvasLock));
+els.canvasPadSideInputs.forEach((input) => {
+  input.addEventListener('input', (e) => setCanvasPadSide(e.target.dataset.side, e.target.value, { fromInput: true }));
+  input.addEventListener('change', syncCanvasUI);
+});
 els.railCanvasBtn.addEventListener('click', toggleCanvasPanel);
 
 // === END CANVAS ===
@@ -1308,7 +1356,11 @@ function updateUI() {
   els.railCanvasBtn.disabled = !hasImage;
   els.railCanvasBtn.classList.toggle('active', state.canvasOpen);
   els.canvasPanel.hidden = !state.canvasOpen && !hasCanvasPad();
-  els.canvasPadAllInput.disabled = !hasImage;
+  els.canvasPadAllInput.disabled = !hasImage || !state.canvasLock;
+  els.canvasLockBtn.disabled = !hasImage;
+  els.canvasLockBtn.title = state.canvasLock ? 'Unlock to set each side' : 'Same padding on all sides';
+  els.canvasSides.hidden = state.canvasLock;
+  els.canvasPadSideInputs.forEach((input) => { input.disabled = !hasImage; });
   els.canvasLockBtn.classList.toggle('active', state.canvasLock);
   els.canvasLockBtn.setAttribute('aria-pressed', String(state.canvasLock));
   els.canvasResetBtn.disabled = !hasImage || !hasCanvasPad();
