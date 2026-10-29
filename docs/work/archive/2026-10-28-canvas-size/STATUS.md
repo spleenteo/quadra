@@ -6,6 +6,7 @@ work: canvas-size
 stacks: [node]
 base: main
 updated: 2026-10-29
+archived: 2026-10-29
 tags: [work, canvas-size]
 description: "Allargare il canvas di un'immagine con sfondo trasparente o di colore pieno, in modo proporzionale (lock) o con un valore diverso per ogni lato."
 ---

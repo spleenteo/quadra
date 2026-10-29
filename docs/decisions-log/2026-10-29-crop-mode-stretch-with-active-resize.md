@@ -34,8 +34,8 @@ Any work on crop or resize, or a user report of a stretched crop preview.
 
 ## References
 
-- docs/work/2026-10-28-canvas-size/slices.md (V2 — done on 2026-10-29)
-- docs/work/2026-10-28-canvas-size/V2-ledger.md
+- docs/work/archive/2026-10-28-canvas-size/slices.md (V2 — done on 2026-10-29)
+- docs/work/archive/2026-10-28-canvas-size/V2-ledger.md
 
 ## Status log
 

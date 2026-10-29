@@ -6,7 +6,7 @@ updated: 2026-10-29
 
 # V2 — Padding lato per lato · Piano
 
-**Mandate**: [slices.md § V2](slices.md#v2--padding-lato-per-lato) · **Guidelines**: [development-guidelines.md](../../development-guidelines.md) (Level: none) · **Lessons**: [lessons.md](lessons.md) · **Execution rules**: [executor.md](/Users/spleenteo/.claude/plugins/cache/flow/flow/417e195afc4a/agents/executor.md)
+**Mandate**: [slices.md § V2](slices.md#v2--padding-lato-per-lato) · **Guidelines**: [development-guidelines.md](../../../development-guidelines.md) (Level: none) · **Lessons**: [lessons.md](lessons.md) · **Execution rules**: [executor.md](/Users/spleenteo/.claude/plugins/cache/flow/flow/417e195afc4a/agents/executor.md)
 
 ## La fetta, decisa qui
 

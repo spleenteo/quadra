@@ -6,7 +6,7 @@ updated: 2026-10-29
 
 # V1 — Padding uniforme trasparente · Piano
 
-**Mandate**: [slices.md § V1](slices.md#v1--padding-uniforme-trasparente) · **Guidelines**: [development-guidelines.md](../../development-guidelines.md) (Level: none) · **Lessons**: nessuna (`lessons.md` assente) · **Execution rules**: [executor.md](/Users/spleenteo/.claude/plugins/cache/flow/flow/417e195afc4a/agents/executor.md)
+**Mandate**: [slices.md § V1](slices.md#v1--padding-uniforme-trasparente) · **Guidelines**: [development-guidelines.md](../../../development-guidelines.md) (Level: none) · **Lessons**: nessuna (`lessons.md` assente) · **Execution rules**: [executor.md](/Users/spleenteo/.claude/plugins/cache/flow/flow/417e195afc4a/agents/executor.md)
 
 ## La fetta, decisa qui
 

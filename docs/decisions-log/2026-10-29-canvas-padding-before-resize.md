@@ -35,8 +35,8 @@ Users need borders in exact px regardless of the resize, or ask for an expand/co
 
 ## References
 
-- docs/work/2026-10-28-canvas-size/shaping.md (X1, "Deciso il 2026-10-29")
-- docs/work/2026-10-28-canvas-size/slices.md (V1 — done on 2026-10-29)
+- docs/work/archive/2026-10-28-canvas-size/shaping.md (X1, "Deciso il 2026-10-29")
+- docs/work/archive/2026-10-28-canvas-size/slices.md (V1 — done on 2026-10-29)
 
 ## Status log
 

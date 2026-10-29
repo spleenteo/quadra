@@ -6,7 +6,7 @@ updated: 2026-10-29
 
 # V3 — Sfondo a colore, export JPG, documentazione · Piano
 
-**Mandate**: [slices.md § V3](slices.md#v3--sfondo-a-colore-export-jpg-documentazione) · **Guidelines**: [development-guidelines.md](../../development-guidelines.md) (Level: none) · **Lessons**: [lessons.md](lessons.md) · **Execution rules**: [executor.md](/Users/spleenteo/.claude/plugins/cache/flow/flow/417e195afc4a/agents/executor.md)
+**Mandate**: [slices.md § V3](slices.md#v3--sfondo-a-colore-export-jpg-documentazione) · **Guidelines**: [development-guidelines.md](../../../development-guidelines.md) (Level: none) · **Lessons**: [lessons.md](lessons.md) · **Execution rules**: [executor.md](/Users/spleenteo/.claude/plugins/cache/flow/flow/417e195afc4a/agents/executor.md)
 
 ## La fetta, decisa qui
 
