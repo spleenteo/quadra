@@ -2,7 +2,7 @@
 status: open
 phase: slice
 slice: V1
-step: execute
+step: close
 work: canvas-size
 stacks: [node]
 base: main
