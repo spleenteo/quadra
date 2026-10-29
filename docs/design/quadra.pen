@@ -1,5 +1,5 @@
 {
-  "version": "2.20",
+  "version": "2.21",
   "children": [
     {
       "type": "frame",
@@ -30,7 +30,7 @@
               "fill": {
                 "type": "image",
                 "enabled": true,
-                "url": "assets/icon.png",
+                "url": "../../assets/icon.png",
                 "mode": "cover"
               }
             },
@@ -720,7 +720,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.049645,
@@ -796,7 +796,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.049645,
@@ -872,7 +872,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.049645,
@@ -948,7 +948,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.049645,
@@ -2084,7 +2084,7 @@
                                   "fill": {
                                     "type": "image",
                                     "enabled": true,
-                                    "url": "assets/icon.png",
+                                    "url": "../../assets/icon.png",
                                     "mode": "cover"
                                   },
                                   "effect": {
@@ -3740,7 +3740,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "assets/icon.png",
+                            "url": "../../assets/icon.png",
                             "mode": "cover"
                           }
                         },
@@ -4367,7 +4367,7 @@
                         {
                           "type": "image",
                           "enabled": true,
-                          "url": "screenshots/quadra-perspective.png",
+                          "url": "../../screenshots/quadra-perspective.png",
                           "mode": "cover",
                           "transform": [
                             21.5,
@@ -4472,7 +4472,7 @@
                       "fill": {
                         "type": "image",
                         "enabled": true,
-                        "url": "screenshots/quadra-perspective.png",
+                        "url": "../../screenshots/quadra-perspective.png",
                         "mode": "cover",
                         "transform": [
                           3.049645,
@@ -4583,7 +4583,7 @@
                       "fill": {
                         "type": "image",
                         "enabled": true,
-                        "url": "screenshots/quadra-perspective.png",
+                        "url": "../../screenshots/quadra-perspective.png",
                         "mode": "cover",
                         "transform": [
                           3.049645,
@@ -4670,7 +4670,7 @@
                       "fill": {
                         "type": "image",
                         "enabled": true,
-                        "url": "screenshots/quadra-perspective.png",
+                        "url": "../../screenshots/quadra-perspective.png",
                         "mode": "cover",
                         "transform": [
                           3.049645,
@@ -4805,7 +4805,7 @@
                       "fill": {
                         "type": "image",
                         "enabled": true,
-                        "url": "assets/icon.png",
+                        "url": "../../assets/icon.png",
                         "mode": "cover"
                       },
                       "effect": {
@@ -5411,7 +5411,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               2.7101,
@@ -5536,7 +5536,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.0496,
@@ -6069,7 +6069,7 @@
                   "fill": {
                     "type": "image",
                     "enabled": true,
-                    "url": "assets/icon.png",
+                    "url": "../../assets/icon.png",
                     "mode": "cover"
                   }
                 }
@@ -6392,7 +6392,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               2.7101,
@@ -6517,7 +6517,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.0496,
@@ -7394,7 +7394,7 @@
                   "fill": {
                     "type": "image",
                     "enabled": true,
-                    "url": "docs/assets/icon.png",
+                    "url": "../assets/icon.png",
                     "mode": "cover"
                   }
                 },
@@ -7590,7 +7590,7 @@
               "fill": {
                 "type": "image",
                 "enabled": true,
-                "url": "docs/assets/quadra-editor.png",
+                "url": "../assets/quadra-editor.png",
                 "mode": "cover"
               },
               "cornerRadius": 14,
@@ -7687,7 +7687,8 @@
                   "content": "My daughter kept asking me to print her school homework, and she kept sending me photos of it, always crooked. All I wanted was to straighten them. Opening Photoshop for that is overkill.",
                   "lineHeight": 1.6,
                   "fontFamily": "$font-ui",
-                  "fontSize": 18
+                  "fontSize": 18,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "text",
@@ -7699,7 +7700,8 @@
                   "content": "So I built Quadra to do that one job. Drag four handles around what should be a rectangle, draw a line along what should be level, and watch the result update live.",
                   "lineHeight": 1.6,
                   "fontFamily": "$font-ui",
-                  "fontSize": 18
+                  "fontSize": 18,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "text",
@@ -7802,7 +7804,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.049645,
@@ -7943,7 +7945,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.049645,
@@ -8051,7 +8053,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "screenshots/quadra-perspective.png",
+                            "url": "../../screenshots/quadra-perspective.png",
                             "mode": "cover",
                             "transform": [
                               3.049645,
@@ -8562,7 +8564,7 @@
                   "fill": {
                     "type": "image",
                     "enabled": true,
-                    "url": "docs/assets/icon.png",
+                    "url": "../assets/icon.png",
                     "mode": "cover"
                   },
                   "effect": {
@@ -8800,7 +8802,7 @@
                   "fill": {
                     "type": "image",
                     "enabled": true,
-                    "url": "docs/assets/icon.png",
+                    "url": "../assets/icon.png",
                     "mode": "cover"
                   }
                 },
@@ -8857,6 +8859,16 @@
           ]
         }
       ]
+    },
+    {
+      "type": "note",
+      "id": "deBWR",
+      "x": 0,
+      "y": -280,
+      "name": "About this file",
+      "width": 520,
+      "height": 0,
+      "content": "Quadra app screens: Empty state, Perspective editor, Alt · Editor layout (the current layout, with tool rail), Landing page. Still holds its own copy of Foundations, Components and App icon: the design system now lives in quadra.lib.pen, and this file is not yet rewired to import it."
     }
   ],
   "variables": {

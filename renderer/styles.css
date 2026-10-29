@@ -242,13 +242,30 @@ body {
   max-width: 100%;
   max-height: 100%;
   display: block;
-  background:
-    linear-gradient(45deg, #2a2a2a 25%, transparent 25%),
-    linear-gradient(-45deg, #2a2a2a 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #2a2a2a 75%),
-    linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
+  outline: 1px solid var(--border);
+  background-color: #1f1f1f;
+  background-image:
+    linear-gradient(45deg, #333 25%, transparent 25%),
+    linear-gradient(-45deg, #333 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #333 75%),
+    linear-gradient(-45deg, transparent 75%, #333 75%);
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, 10px 0px;
+}
+
+.canvas-wrap + .canvas-wrap {
+  position: relative;
+}
+
+.canvas-wrap + .canvas-wrap::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+  pointer-events: none;
 }
 
 .handles-overlay {
@@ -642,6 +659,111 @@ body {
 
 .size-row.spread .check-row {
   margin: 0;
+}
+
+.lock-btn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+}
+
+.lock-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lock-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.lock-btn:disabled {
+  cursor: default;
+}
+
+.canvas-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+.canvas-sides .control-input-group {
+  min-width: 0;
+}
+
+.lock-btn.active .lock-icon-open,
+.lock-btn:not(.active) .lock-icon-closed {
+  display: none;
+}
+
+.bg-segment {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bg-segment-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 11px;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.bg-segment-btn + .bg-segment-btn {
+  border-left: 1px solid var(--border);
+}
+
+.bg-segment-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.bg-segment-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bg-color-row input[type="color"] {
+  display: block;
+  width: 100%;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.bg-color-row input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.bg-color-row input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 2px;
+}
+
+.bg-color-row input[type="color"]:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .dim-row label {

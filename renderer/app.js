@@ -20,6 +20,11 @@ const state = {
   preBounds: null,         // bounding box dell'originale post-rot/skew
   tool: 'perspective',     // 'perspective' | 'level'
   linePoints: null,        // [[x1,y1], [x2,y2]] in coord originale
+  canvasPad: initialCanvasPad(), // padding in px attorno all'immagine, prima del resize
+  canvasLock: true,        // stessi px su tutti i lati
+  canvasOpen: false,       // pannello Canvas aperto dalla rail
+  canvasBg: null,          // sfondo delle fasce di padding: null = trasparente, altrimenti '#rrggbb'
+  canvasBgDefault: null,   // sfondo di partenza: bianco per i JPG, altrimenti null
 };
 
 const els = {
@@ -60,6 +65,16 @@ const els = {
   cropRemoveBtn: document.getElementById('cropRemoveBtn'),
   cropPanel: document.getElementById('cropPanel'),
   railCropBtn: document.getElementById('railCropBtn'),
+  railCanvasBtn: document.getElementById('railCanvasBtn'),
+  canvasPanel: document.getElementById('canvasPanel'),
+  canvasPadAllInput: document.getElementById('canvasPadAllInput'),
+  canvasLockBtn: document.getElementById('canvasLockBtn'),
+  canvasSides: document.getElementById('canvasSides'),
+  canvasPadSideInputs: document.querySelectorAll('#canvasSides input[data-side]'),
+  canvasBgBtns: document.querySelectorAll('.bg-segment-btn'),
+  canvasBgColorRow: document.getElementById('canvasBgColorRow'),
+  canvasBgColorInput: document.getElementById('canvasBgColorInput'),
+  canvasResetBtn: document.getElementById('canvasResetBtn'),
   statusSource: document.getElementById('statusSource'),
   statusDirty: document.getElementById('statusDirty'),
   cropIdleControls: document.getElementById('cropIdleControls'),
@@ -94,6 +109,7 @@ const SUPPORTED_MIME = ['image/png', 'image/jpeg', 'image/webp'];
 const stageA = document.createElement('canvas');
 const stageB = document.createElement('canvas');
 const stageC = document.createElement('canvas');
+const stageD = document.createElement('canvas');
 let pipeline = null;
 let renderQueued = false;
 
@@ -103,6 +119,10 @@ function initialCorners(w, h) {
 
 function initialLine(w, h) {
   return [[w * 0.2, h / 2], [w * 0.8, h / 2]];
+}
+
+function initialCanvasPad() {
+  return { t: 0, r: 0, b: 0, l: 0 };
 }
 
 function clamp(v, min, max) {
@@ -158,6 +178,11 @@ async function openImageFromBytes(bytes, filePath) {
   state.preBounds = null;
   state.tool = 'perspective';
   state.linePoints = initialLine(bitmap.width, bitmap.height);
+  state.canvasPad = initialCanvasPad();
+  state.canvasLock = true;
+  state.canvasBgDefault = filePath && formatFromPath(filePath) === 'jpeg' ? '#ffffff' : null;
+  resetCanvasBg();
+  state.canvasOpen = false;
   state.isDirty = false;
 
   ensurePipeline();
@@ -165,6 +190,7 @@ async function openImageFromBytes(bytes, filePath) {
   syncRotationUI();
   syncSkewUI();
   syncFormatUI();
+  syncCanvasUI();
   scheduleRender();
 
   els.dualCanvas.hidden = false;
@@ -395,7 +421,10 @@ function runPipeline() {
   // Step 4: crop stageB → stageC
   applyCropToStageC();
 
-  // Step 5: resize stageC → previewCanvas
+  // Step 5: padding stageC → stageD
+  applyCanvasPadToStageD();
+
+  // Step 6: resize stageD → previewCanvas
   applyResizeToPreview();
 }
 
@@ -477,9 +506,27 @@ function applyCropToStageC() {
   ctx.drawImage(stageB, sx, sy, sw, sh, 0, 0, sw, sh);
 }
 
+function applyCanvasPadToStageD() {
+  // In modalità editing crop il preview è l'immagine intera: niente padding.
+  const { t, r, b, l } = state.cropMode ? initialCanvasPad() : state.canvasPad;
+  const outW = stageC.width + l + r;
+  const outH = stageC.height + t + b;
+
+  const dst = stageD;
+  dst.width = outW;
+  dst.height = outH;
+  const ctx = dst.getContext('2d');
+  ctx.clearRect(0, 0, outW, outH);
+  if (state.canvasBg) {
+    ctx.fillStyle = state.canvasBg;
+    ctx.fillRect(0, 0, outW, outH);
+  }
+  ctx.drawImage(stageC, l, t);
+}
+
 function applyResizeToPreview() {
-  const naturalW = stageC.width;
-  const naturalH = stageC.height;
+  const naturalW = stageD.width;
+  const naturalH = stageD.height;
 
   if (!state.resizeActive) {
     state.resizeW = naturalW;
@@ -497,7 +544,7 @@ function applyResizeToPreview() {
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
   ctx.clearRect(0, 0, targetW, targetH);
-  ctx.drawImage(stageC, 0, 0, targetW, targetH);
+  ctx.drawImage(stageD, 0, 0, targetW, targetH);
 
   els.resizeHint.textContent = `Output ${targetW} × ${targetH} px`;
 }
@@ -1031,7 +1078,7 @@ els.resetLineBtn.addEventListener('click', resetLine);
 
 // === RESIZE ===
 
-function syncResizeUI(naturalW = stageC.width, naturalH = stageC.height) {
+function syncResizeUI(naturalW = stageD.width, naturalH = stageD.height) {
   els.resizeWInput.value = String(Math.round(state.resizeW || naturalW));
   els.resizeHInput.value = String(Math.round(state.resizeH || naturalH));
   const pct = naturalW > 0 ? ((state.resizeW || naturalW) / naturalW) * 100 : 100;
@@ -1040,7 +1087,7 @@ function syncResizeUI(naturalW = stageC.width, naturalH = stageC.height) {
 }
 
 function naturalAspect() {
-  return stageC.width > 0 && stageC.height > 0 ? stageC.width / stageC.height : 1;
+  return stageD.width > 0 && stageD.height > 0 ? stageD.width / stageD.height : 1;
 }
 
 function setResizeFromW(value) {
@@ -1068,8 +1115,8 @@ function setResizeFromH(value) {
 function setResizeFromPct(value) {
   const pct = clamp(value, 0.1, 1000);
   state.resizeActive = true;
-  state.resizeW = Math.max(1, Math.round((stageC.width * pct) / 100));
-  state.resizeH = Math.max(1, Math.round((stageC.height * pct) / 100));
+  state.resizeW = Math.max(1, Math.round((stageD.width * pct) / 100));
+  state.resizeH = Math.max(1, Math.round((stageD.height * pct) / 100));
   state.isDirty = true;
   syncResizeUI();
   scheduleRender();
@@ -1088,8 +1135,8 @@ function setLockAspect(checked) {
 
 function resetResize() {
   state.resizeActive = false;
-  state.resizeW = stageC.width;
-  state.resizeH = stageC.height;
+  state.resizeW = stageD.width;
+  state.resizeH = stageD.height;
   state.isDirty = true;
   scheduleRender();
   updateUI();
@@ -1102,6 +1149,114 @@ els.lockAspectInput.addEventListener('change', (e) => setLockAspect(e.target.che
 els.resizeResetBtn.addEventListener('click', resetResize);
 
 // === END RESIZE ===
+
+// === CANVAS ===
+
+const CANVAS_PAD_MAX = 4000;
+
+function syncCanvasUI() {
+  els.canvasPadAllInput.value = String(state.canvasPad.t);
+  els.canvasPadSideInputs.forEach((input) => {
+    input.value = String(state.canvasPad[input.dataset.side]);
+  });
+}
+
+// Con proporzioni bloccate e resize attivo, l'altezza segue l'aspetto della
+// canvas con padding. stageD ha ancora la dimensione vecchia fino al prossimo
+// render, quindi la dimensione naturale si passa esplicita.
+function fitResizeToCanvasPad() {
+  if (!state.resizeActive || !state.lockAspect) return;
+  const { t, r, b, l } = state.canvasPad;
+  const paddedW = stageC.width + l + r;
+  const paddedH = stageC.height + t + b;
+  state.resizeH = Math.max(1, Math.round(state.resizeW / (paddedW / paddedH)));
+  syncResizeUI(paddedW, paddedH);
+}
+
+function hasCanvasPad() {
+  const { t, r, b, l } = state.canvasPad;
+  return t > 0 || r > 0 || b > 0 || l > 0;
+}
+
+function setCanvasPadAll(value, opts = {}) {
+  const v = Math.round(clamp(value, 0, CANVAS_PAD_MAX));
+  state.canvasPad = { t: v, r: v, b: v, l: v };
+  fitResizeToCanvasPad();
+  if (!opts.fromInput) syncCanvasUI();
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function setCanvasPadSide(side, value, opts = {}) {
+  const v = Math.round(clamp(value, 0, CANVAS_PAD_MAX));
+  state.canvasPad = { ...state.canvasPad, [side]: v };
+  fitResizeToCanvasPad();
+  if (!opts.fromInput) syncCanvasUI();
+  else if (side === 't') els.canvasPadAllInput.value = String(v);
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function setCanvasLock(locked) {
+  state.canvasLock = !!locked;
+  if (state.canvasLock) {
+    const v = state.canvasPad.t;
+    state.canvasPad = { t: v, r: v, b: v, l: v };
+    fitResizeToCanvasPad();
+  }
+  syncCanvasUI();
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function resetCanvas() {
+  state.canvasPad = initialCanvasPad();
+  fitResizeToCanvasPad();
+  resetCanvasBg();
+  syncCanvasUI();
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function resetCanvasBg() {
+  state.canvasBg = state.canvasBgDefault;
+  els.canvasBgColorInput.value = state.canvasBg ?? '#ffffff';
+}
+
+function setCanvasBg(value) {
+  if (value === state.canvasBg) return;
+  state.canvasBg = value;
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function toggleCanvasPanel() {
+  state.canvasOpen = !state.canvasOpen;
+  updateUI();
+}
+
+els.canvasPadAllInput.addEventListener('input', (e) => setCanvasPadAll(e.target.value, { fromInput: true }));
+els.canvasPadAllInput.addEventListener('change', syncCanvasUI);
+els.canvasResetBtn.addEventListener('click', resetCanvas);
+els.canvasLockBtn.addEventListener('click', () => setCanvasLock(!state.canvasLock));
+els.canvasPadSideInputs.forEach((input) => {
+  input.addEventListener('input', (e) => setCanvasPadSide(e.target.dataset.side, e.target.value, { fromInput: true }));
+  input.addEventListener('change', syncCanvasUI);
+});
+els.canvasBgBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    setCanvasBg(btn.dataset.bg === 'color' ? els.canvasBgColorInput.value : null);
+  });
+});
+els.canvasBgColorInput.addEventListener('input', (e) => setCanvasBg(e.target.value));
+els.railCanvasBtn.addEventListener('click', toggleCanvasPanel);
+
+// === END CANVAS ===
 
 // === FORMAT / QUALITY ===
 
@@ -1142,10 +1297,15 @@ function resetAll() {
   state.cropMode = false;
   state.cropBackup = null;
   state.resizeActive = false;
+  state.canvasPad = initialCanvasPad();
+  state.canvasLock = true;
+  resetCanvasBg();
+  state.canvasOpen = false;
   state.isDirty = true;
   els.cropOverlay.hidden = true;
   syncRotationUI();
   syncSkewUI();
+  syncCanvasUI();
   scheduleRender();
   requestAnimationFrame(updateHandlesPositions);
   updateUI();
@@ -1164,6 +1324,11 @@ function closeImage() {
   state.resizeActive = false;
   state.preBounds = null;
   state.linePoints = null;
+  state.canvasPad = initialCanvasPad();
+  state.canvasLock = true;
+  state.canvasBgDefault = null;
+  resetCanvasBg();
+  state.canvasOpen = false;
   state.tool = 'perspective';
   state.isDirty = false;
   els.dualCanvas.hidden = true;
@@ -1174,6 +1339,7 @@ function closeImage() {
   els.toolButtons.forEach((b) => b.classList.toggle('active', b.dataset.tool === 'perspective'));
   els.perspectivePanel.hidden = false;
   els.levelPanel.hidden = true;
+  syncCanvasUI();
   updateUI();
 }
 
@@ -1221,6 +1387,25 @@ function updateUI() {
   els.cropRemoveBtn.hidden = !state.cropRect || state.cropMode;
   els.cropIdleControls.hidden = state.cropMode;
   els.cropActiveControls.hidden = !state.cropMode;
+  els.railCanvasBtn.disabled = !hasImage;
+  els.railCanvasBtn.classList.toggle('active', state.canvasOpen);
+  els.canvasPanel.hidden = !state.canvasOpen && !hasCanvasPad() && state.canvasBg === state.canvasBgDefault;
+  els.canvasPadAllInput.disabled = !hasImage || !state.canvasLock || state.cropMode;
+  els.canvasLockBtn.disabled = !hasImage || state.cropMode;
+  els.canvasLockBtn.title = state.canvasLock ? 'Unlock to set each side' : 'Same padding on all sides';
+  els.canvasSides.hidden = state.canvasLock;
+  els.canvasPadSideInputs.forEach((input) => { input.disabled = !hasImage || state.cropMode; });
+  els.canvasLockBtn.classList.toggle('active', state.canvasLock);
+  els.canvasLockBtn.setAttribute('aria-pressed', String(state.canvasLock));
+  els.canvasBgBtns.forEach((btn) => {
+    const on = (btn.dataset.bg === 'color') === (state.canvasBg !== null);
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-pressed', String(on));
+    btn.disabled = !hasImage || state.cropMode;
+  });
+  els.canvasBgColorRow.hidden = state.canvasBg === null;
+  els.canvasBgColorInput.disabled = !hasImage || state.cropMode;
+  els.canvasResetBtn.disabled = !hasImage || state.cropMode || (!hasCanvasPad() && state.canvasBg === state.canvasBgDefault);
   els.resizeWInput.disabled = !hasImage;
   els.resizeHInput.disabled = !hasImage;
   els.resizePctInput.disabled = !hasImage;
@@ -1252,8 +1437,18 @@ function updateUI() {
 }
 
 function encodeCanvas(canvas, mimeType, quality) {
+  let src = canvas;
+  if (mimeType === 'image/jpeg') {
+    src = document.createElement('canvas');
+    src.width = canvas.width;
+    src.height = canvas.height;
+    const ctx = src.getContext('2d');
+    ctx.fillStyle = state.canvasBg ?? '#ffffff';
+    ctx.fillRect(0, 0, src.width, src.height);
+    ctx.drawImage(canvas, 0, 0);
+  }
   return new Promise((resolve, reject) => {
-    canvas.toBlob(
+    src.toBlob(
       (blob) => (blob ? resolve(blob) : reject(new Error('Encoding failed'))),
       mimeType,
       quality,

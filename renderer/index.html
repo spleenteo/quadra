@@ -37,6 +37,10 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>
           <span>Crop</span>
         </button>
+        <button class="rail-tool" id="railCanvasBtn" title="Canvas size" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 15 6 6"/><path d="m15 9 6-6"/><path d="M21 16v5h-5"/><path d="M21 8V3h-5"/><path d="M3 16v5h5"/><path d="m3 21 6-6"/><path d="M3 8V3h5"/><path d="M9 9 3 3"/></svg>
+          <span>Canvas</span>
+        </button>
       </nav>
 
       <section class="canvas-area" id="canvasArea">
@@ -120,6 +124,60 @@
             <p class="hint-sm">Drag the corners or the inside of the rectangle.</p>
             <button class="btn full-width primary" id="cropConfirmBtn">Confirm</button>
             <button class="btn full-width" id="cropCancelBtn">Cancel</button>
+          </div>
+        </section>
+        <section class="section" id="canvasPanel" hidden>
+          <h2>Canvas</h2>
+          <div class="size-row">
+            <label for="canvasPadAllInput">All sides</label>
+            <div class="control-input-group">
+              <input type="number" id="canvasPadAllInput" min="0" max="4000" step="1" value="0" disabled />
+              <span class="unit">px</span>
+            </div>
+            <button class="lock-btn" id="canvasLockBtn" title="Unlock to set each side" aria-pressed="true" disabled>
+              <svg class="lock-icon-closed" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <svg class="lock-icon-open" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+            </button>
+          </div>
+          <div class="canvas-sides" id="canvasSides" hidden>
+            <div class="size-row">
+              <label for="canvasPadTInput">T</label>
+              <div class="control-input-group">
+                <input type="number" id="canvasPadTInput" data-side="t" min="0" max="4000" step="1" value="0" disabled />
+                <span class="unit">px</span>
+              </div>
+            </div>
+            <div class="size-row">
+              <label for="canvasPadRInput">R</label>
+              <div class="control-input-group">
+                <input type="number" id="canvasPadRInput" data-side="r" min="0" max="4000" step="1" value="0" disabled />
+                <span class="unit">px</span>
+              </div>
+            </div>
+            <div class="size-row">
+              <label for="canvasPadBInput">B</label>
+              <div class="control-input-group">
+                <input type="number" id="canvasPadBInput" data-side="b" min="0" max="4000" step="1" value="0" disabled />
+                <span class="unit">px</span>
+              </div>
+            </div>
+            <div class="size-row">
+              <label for="canvasPadLInput">L</label>
+              <div class="control-input-group">
+                <input type="number" id="canvasPadLInput" data-side="l" min="0" max="4000" step="1" value="0" disabled />
+                <span class="unit">px</span>
+              </div>
+            </div>
+          </div>
+          <div class="bg-segment" role="group" aria-label="Background">
+            <button class="bg-segment-btn" data-bg="transparent" aria-pressed="true" disabled>Transparent</button>
+            <button class="bg-segment-btn" data-bg="color" aria-pressed="false" disabled>Color</button>
+          </div>
+          <div class="bg-color-row" id="canvasBgColorRow" hidden>
+            <input type="color" id="canvasBgColorInput" value="#ffffff" aria-label="Background color" disabled />
+          </div>
+          <div class="control-actions">
+            <button class="btn-link" id="canvasResetBtn" disabled>Reset canvas</button>
           </div>
         </section>
 

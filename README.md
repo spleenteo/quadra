@@ -5,7 +5,7 @@
 
   **Square it up.**
 
-  A simple desktop app for macOS to fix perspective, straighten and crop your photos.
+  A simple desktop app for macOS to fix perspective, straighten, crop and frame your photos.
 </div>
 
 ![Quadra perspective correction](screenshots/quadra-perspective.png)
@@ -37,7 +37,8 @@ Quadra helps you fix images that need geometric correction:
 - ⤧ **Horizontal & vertical skew** — fine-tune perpendicularity
 - ✂️ **Manual crop** — rectangular crop with 8 handles + draggable interior
 - 📐 **Resize** — width/height in pixels or scale percentage, with optional aspect ratio lock
-- 💾 **Save** in PNG, JPG, or WebP format with adjustable quality
+- 🔲 **Canvas padding** — add space around the image, the same on all sides or set per side, transparent or filled with a color
+- 💾 **Save** in PNG, JPG, or WebP format with adjustable quality; JPG fills transparent areas with the background color (white by default)
 - 🖱️ **Open with Quadra** — right-click an image in Finder and pick Quadra from the "Open With" menu
 
 Everything happens locally on your machine. No uploads, no servers.
@@ -49,8 +50,9 @@ Everything happens locally on your machine. No uploads, no servers.
    - **Perspective**: drag the 4 corner handles to mark the corners of what should be straightened. The preview on the right shows the result live.
    - **Straighten**: draw a line on a reference (horizon, vertical edge, etc.), see the suggested rotation, click "Apply rotation".
 3. **Adjust** rotation, skew, and crop as needed
-4. **Resize** if you want a specific output size
-5. **Save** (overwrite original) or **Save As…** (choose a new file)
+4. **Add canvas padding** — click Canvas in the tool rail, set the pixels (unlock the padlock to set each side) and pick a Transparent or Color background
+5. **Resize** if you want a specific output size
+6. **Save** (overwrite original) or **Save As…** (choose a new file)
 
 ### Magnifier loupe
 

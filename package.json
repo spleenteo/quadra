@@ -1,6 +1,6 @@
 {
   "name": "quadra",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "Square it up — perspective correction & geometric image fixes",
   "main": "main.js",
   "author": "spleenteo",
