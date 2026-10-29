@@ -70,7 +70,7 @@ Sblocca, imposta T=0, B=120, L=R=20: la preview mostra il bordo asimmetrico e l'
 **Dentro**
 - Nel pannello Canvas: Segment Transparent / Color e `<input type="color">` (M3). `state.canvasBg = null | '#rrggbb'`; ogni modifica imposta `isDirty`.
 - Default dello sfondo: bianco se l'immagine aperta è un JPG (da `formatFromPath` all'apertura), altrimenti trasparente. Cambiare formato (`setFormat`, `app.js:1115`; Save As, `app.js:1299`) non tocca una scelta già fatta dall'utente. "Reset canvas", `resetAll`, apertura e `closeImage` riportano `canvasBg` al default.
-- Stage di padding (V1): con un colore, `fillRect` solo sulle quattro fasce di padding, non sull'intero canvas: gli angoli trasparenti della rotazione (`app.js:443`) restano trasparenti in PNG e WebP.
+- Stage di padding (V1): con un colore, `fillRect` sull'intero `stageD` prima di `drawImage`: il colore è lo sfondo di tutto il canvas, quindi fasce, angoli della rotazione e zone trasparenti dell'immagine (corretto alla verifica a mano, vedi Deviations).
 - Export (M8): l'appiattimento sta in un solo punto, dentro `encodeCanvas` (`app.js:1254`), quando il mime effettivo è `image/jpeg`: l'immagine viene composta su un canvas riempito col colore di sfondo, bianco se trasparente. Vale per Save (`app.js:1274`, mime dal percorso) e Save As (`app.js:1287`, mime dall'estensione). WebP conserva l'alfa: nessun appiattimento.
 - Documentazione: voce in `README.md` ("What it does", "How to use") e feature nella landing (`docs/index.html:7`, `:12`, `:171`, griglia `:222-252`). Changelog e versione alla chiusura del lavoro.
 
@@ -79,7 +79,7 @@ Sblocca, imposta T=0, B=120, L=R=20: la preview mostra il bordo asimmetrico e l'
 - Il drag & drop apre i file senza percorso (`file.path`, rimosso da Electron 32, `app.js:186`): un JPG trascinato è trattato come PNG. Bug preesistente, lavoro separato.
 
 **Done**
-Scegli Color e un rosso: il bordo in preview è rosso, e il file salvato in PNG lo ha rosso. PNG ruotato di 10°, Color rosso, padding 0: gli angoli restano trasparenti. Apri un JPG con Cmd+O, ruotalo di 10° senza padding e salvalo: gli angoli escono bianchi invece che neri. Con padding trasparente su un JPG, il bordo esce bianco. Save As WebP con Transparent: bordo trasparente, nessun appiattimento.
+Scegli Color e un rosso: il bordo in preview è rosso, e il file salvato in PNG lo ha rosso. PNG ruotato di 10°, Color rosso, padding 0: anche gli angoli sono rossi; con Transparent restano trasparenti. Apri un JPG con Cmd+O, ruotalo di 10° senza padding e salvalo: gli angoli escono bianchi invece che neri. Con padding trasparente su un JPG, il bordo esce bianco. Save As WebP con Transparent: bordo trasparente, nessun appiattimento.
 
 **Gotcha**
 - Il bianco al posto del nero sugli angoli ruotati dei JPG cambia un comportamento esistente: va dichiarato nel changelog.
@@ -88,3 +88,4 @@ Scegli Color e un rosso: il bordo in preview è rosso, e il file salvato in PNG 
 - La tagline di `README.md` (riga 8) passa a "fix perspective, straighten, crop and frame your photos", come le descrizioni della landing: il mandato nominava solo "What it does" e "How to use".
 - Il formato non cambia mai lo sfondo (preview a scacchiera, file bianco per l'appiattimento): lettura più stretta del mandato, confermata dall'utente.
 - Segment non confrontato con il design (limite pen.dev): stile giudicato alla prova a mano.
+- Alla verifica a mano: con padding 100, Color blu e Rotate 36°, gli angoli della rotazione restavano a scacchiera; l'utente si aspettava il blu. Il colore diventa lo sfondo dell'intero canvas (un solo `fillRect`), non più delle sole fasce: anche le zone trasparenti di un PNG prendono il colore, coerente con l'appiattimento JPG.

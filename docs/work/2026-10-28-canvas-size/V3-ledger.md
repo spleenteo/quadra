@@ -22,3 +22,5 @@ env: (force/model; empty = unset)
 - Ruling: T4 (critical) reviewed in session — 10-line diff — cost if wrong: caught at the manual check on saved files
 - T4: complete
 - Ruling: no separate final review — five small tasks each read in full; the risky parts (band fill, flatten) are a few lines — cost if wrong: a cross-task issue surfaces at the manual check
+- Manual check · user · fail — padding 100, Color blue, Rotate 36°: rotation corners stayed checkerboard, user expected blue
+- Fix · conductor, in session · applyCanvasPadToStageD fills the whole stageD with canvasBg (one fillRect) instead of the four bands; shaping M5, slices V3, V3-plan updated

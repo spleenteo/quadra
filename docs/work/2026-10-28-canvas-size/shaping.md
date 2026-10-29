@@ -114,7 +114,7 @@ Le alternative di X3 cambiano solo il punto d'ingresso. Il meccanismo è lo stes
 | M2 | Lock: il valore di "All sides" va identico su t, r, b, l. Togliendo il lock i quattro campi partono da quel valore; rimettendolo, "All sides" prende il valore di top e lo ricopia sugli altri | |
 | M3 | Sfondo: Transparent / Color (`<input type="color">`); se l'immagine aperta è un JPG il default è bianco; cambiare formato non tocca una scelta già fatta | |
 | M4 | Stato `state.canvasPad = {t, r, b, l}` in px, `state.canvasLock`, `state.canvasBg = null \| '#rrggbb'`; reset all'apertura di un'immagine e con "Reset all" | |
-| M5 | Stage tra crop e resize: il padding compone `stageC` su `stageD` `(W+l+r) × (H+t+b)`, colore solo sulle quattro fasce (gli angoli ruotati restano trasparenti), `drawImage` all'offset (l, t); il resize legge `stageD`, quindi Size mostra le dimensioni con il bordo; non applicato in crop mode | |
+| M5 | Stage tra crop e resize: il padding compone `stageC` su `stageD` `(W+l+r) × (H+t+b)`, con un colore `fillRect` sull'intero `stageD` sotto l'immagine (fasce, angoli ruotati e zone trasparenti prendono il colore), `drawImage` all'offset (l, t); il resize legge `stageD`, quindi Size mostra le dimensioni con il bordo; non applicato in crop mode | |
 | M6 | Size (W/H/%) e l'hint "Output W × H px" includono il padding | |
 | M7 | Link "Reset canvas" che azzera padding e sfondo | |
 | M8 | Export JPG: in `encodeCanvas`, quando il mime effettivo è `image/jpeg`, l'immagine viene composta su un canvas riempito col colore di sfondo (bianco se trasparente); vale anche per gli angoli trasparenti della rotazione | |
