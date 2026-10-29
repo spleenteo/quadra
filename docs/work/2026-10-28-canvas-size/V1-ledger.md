@@ -15,3 +15,7 @@ env: (force/model; empty = unset)
 - T4 review · conductor, in session · pass — 22-line CSS diff matches the task; overlays position against `.canvas-container` (already `position: relative`), so the new `position: relative` on the Preview wrap moves nothing
 - Ruling: T4 reviewed in session instead of by flow:task-reviewer — CSS only, no logic — cost if wrong: a visual glitch caught at the manual check
 - T4: complete
+- T5 (added after the manual check: Size did not include the border; X1-B → X1-A) · flow:executor · definition: mid · DONE · 4ff880f
+- T5 review · conductor, in session · pass — diff matches T5: padding stage stageC→stageD, resize stageD→previewCanvas with the hint, Size section reads stageD; crop untouched; in crop mode padding is zero so the overlay stays aligned
+- Ruling: T5 (critical) reviewed in session instead of a top-tier flow:task-reviewer — the diff is a mechanical reorder of two stages already reviewed in T1, read in full — cost if wrong: an ordering bug caught at the manual check
+- T5: complete
