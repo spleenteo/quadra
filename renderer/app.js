@@ -20,6 +20,7 @@ const state = {
   preBounds: null,         // bounding box dell'originale post-rot/skew
   tool: 'perspective',     // 'perspective' | 'level'
   linePoints: null,        // [[x1,y1], [x2,y2]] in coord originale
+  canvasPad: initialCanvasPad(), // padding in px attorno all'output, dopo il resize
 };
 
 const els = {
@@ -106,6 +107,10 @@ function initialLine(w, h) {
   return [[w * 0.2, h / 2], [w * 0.8, h / 2]];
 }
 
+function initialCanvasPad() {
+  return { t: 0, r: 0, b: 0, l: 0 };
+}
+
 function clamp(v, min, max) {
   return Math.max(min, Math.min(max, Number(v) || 0));
 }
@@ -159,6 +164,7 @@ async function openImageFromBytes(bytes, filePath) {
   state.preBounds = null;
   state.tool = 'perspective';
   state.linePoints = initialLine(bitmap.width, bitmap.height);
+  state.canvasPad = initialCanvasPad();
   state.isDirty = false;
 
   ensurePipeline();
@@ -506,7 +512,7 @@ function applyResizeToStageD() {
 
 function applyCanvasPadToPreview() {
   // In modalità editing crop il preview è l'immagine intera: niente padding.
-  const t = 0, r = 0, b = 0, l = 0;
+  const { t, r, b, l } = state.cropMode ? initialCanvasPad() : state.canvasPad;
   const outW = stageD.width + l + r;
   const outH = stageD.height + t + b;
 
@@ -1160,6 +1166,7 @@ function resetAll() {
   state.cropMode = false;
   state.cropBackup = null;
   state.resizeActive = false;
+  state.canvasPad = initialCanvasPad();
   state.isDirty = true;
   els.cropOverlay.hidden = true;
   syncRotationUI();
@@ -1182,6 +1189,7 @@ function closeImage() {
   state.resizeActive = false;
   state.preBounds = null;
   state.linePoints = null;
+  state.canvasPad = initialCanvasPad();
   state.tool = 'perspective';
   state.isDirty = false;
   els.dualCanvas.hidden = true;
