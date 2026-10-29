@@ -1356,14 +1356,14 @@ function updateUI() {
   els.railCanvasBtn.disabled = !hasImage;
   els.railCanvasBtn.classList.toggle('active', state.canvasOpen);
   els.canvasPanel.hidden = !state.canvasOpen && !hasCanvasPad();
-  els.canvasPadAllInput.disabled = !hasImage || !state.canvasLock;
-  els.canvasLockBtn.disabled = !hasImage;
+  els.canvasPadAllInput.disabled = !hasImage || !state.canvasLock || state.cropMode;
+  els.canvasLockBtn.disabled = !hasImage || state.cropMode;
   els.canvasLockBtn.title = state.canvasLock ? 'Unlock to set each side' : 'Same padding on all sides';
   els.canvasSides.hidden = state.canvasLock;
-  els.canvasPadSideInputs.forEach((input) => { input.disabled = !hasImage; });
+  els.canvasPadSideInputs.forEach((input) => { input.disabled = !hasImage || state.cropMode; });
   els.canvasLockBtn.classList.toggle('active', state.canvasLock);
   els.canvasLockBtn.setAttribute('aria-pressed', String(state.canvasLock));
-  els.canvasResetBtn.disabled = !hasImage || !hasCanvasPad();
+  els.canvasResetBtn.disabled = !hasImage || !hasCanvasPad() || state.cropMode;
   els.resizeWInput.disabled = !hasImage;
   els.resizeHInput.disabled = !hasImage;
   els.resizePctInput.disabled = !hasImage;
