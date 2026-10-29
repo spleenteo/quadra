@@ -59,6 +59,12 @@ Sblocca, imposta T=0, B=120, L=R=20: la preview mostra il bordo asimmetrico e l'
 **Deviations found while planning V2**
 - Revisione del piano: con un resize attivo il padding (anche uniforme, già in V1) deformava l'immagine. Deciso: con proporzioni bloccate W resta e H si ricalcola sulle nuove proporzioni (`fitResizeToCanvasPad`); corregge anche V1, come previsto per le fette chiuse.
 
+**V2 — done on 2026-10-29**
+- Due task: T1 markup (griglia 2×2 T R / B L, lock con icone `lock` / `lock-open`), T2 lock cliccabile e padding per lato, più `fitResizeToCanvasPad` (con resize attivo e proporzioni bloccate W resta, H si ricalcola), che corregge anche il padding uniforme di V1.
+- La revisione di T2 ha trovato che in crop mode il ricalcolo usava l'immagine non ritagliata: i campi Canvas sono disabilitati durante Edit crop (ruling nel ledger). Due passi della prova a mano erano scritti in modo da non poter passare: corretti nel piano prima della prova.
+- Problema preesistente registrato, non risolto: con un resize attivo e proporzioni bloccate l'anteprima in crop mode è stirata se c'è un crop o un padding, e Confirm crop non ricalcola H.
+- Done verificato a mano dall'utente il 2026-10-29.
+
 ## V3 — Sfondo a colore, export JPG, documentazione
 
 **Dentro**

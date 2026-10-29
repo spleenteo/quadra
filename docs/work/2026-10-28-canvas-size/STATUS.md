@@ -1,8 +1,8 @@
 ---
 status: open
 phase: slice
-slice: V2
-step: close
+slice: V3
+step: plan
 work: canvas-size
 stacks: [node]
 base: main
@@ -20,7 +20,7 @@ description: "Allargare il canvas di un'immagine con sfondo trasparente o di col
 ## Slices
 
 - [x] V1 — Padding uniforme trasparente
-- [ ] V2 — Padding lato per lato
+- [x] V2 — Padding lato per lato
 - [ ] V3 — Sfondo a colore ed export JPG
 
 ## Log
@@ -33,3 +33,4 @@ description: "Allargare il canvas di un'immagine con sfondo trasparente o di col
 - 2026-10-28 — slicing — 3 slices from parts M1–M8 (breadboard skipped); fidelity check skipped (no frame) — impact next — 10 min — n/a
 - 2026-10-29 — impact — 1 high (crop overlay with padding), 5 medium, 6 low; all fixes applied to V1–V3 and shaping M3/M5/M8; drag & drop path bug left out as separate work — V1 plan next — 15 min — n/a
 - 2026-10-29 — V1 closed — 5 tasks (2 added at the manual check: preview visibility, X1-B → X1-A); Done verified by the user; lessons.md created — V2 plan next — ~90 min — n/a
+- 2026-10-29 — V2 closed — 2 tasks + 1 fix round (padding controls disabled in crop mode); resize keeps W and refits H on padding change; Done verified by the user — V3 plan next — ~45 min — n/a
