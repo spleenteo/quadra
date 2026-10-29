@@ -39,6 +39,11 @@ Apri un PNG, clicca Canvas nella rail mentre è attivo Perspective, scrivi 40 in
 - `applyResizeToPreview` rinominata `applyResizeToStageD`: non scrive più sulla preview, il nome segue `applyRotateSkewToStageB` / `applyCropToStageC`.
 - Alla verifica a mano: padding poco visibile in preview → T4 (contorno, scacchiera più chiara, linea tra Original e Preview); Size non includeva il bordo → X1-B sostituita da X1-A, T5 (padding prima del resize, `applyCanvasPadToStageD` + `applyResizeToPreview`).
 
+**V1 — done on 2026-10-29**
+- Cinque task: T1 pipeline con `stageD`, T2 markup, T3 collegamento e reset, più due nati dalla verifica a mano. T4: il padding non si vedeva (preview adattata al riquadro, scacchiera `#2a2a2a` quasi uguale allo sfondo); aggiunti contorno alle canvas, scacchiera più chiara e linea tra Original e Preview. T5: Size restava a 500 mentre il file era 580, l'utente si aspettava che il canvas espandesse l'immagine; X1-B sostituita da X1-A, il padding sta tra crop e resize e Size lo include.
+- Rulings (dal ledger): un'osservazione sul formato di un report non rimandata indietro; nessuna revisione finale separata (la revisione di T3 ha letto i quattro commit sul Done); T4 e T5 rivisti in sessione, diff brevi e meccanici.
+- Done verificato a mano dall'utente il 2026-10-29.
+
 ## V2 — Padding lato per lato
 
 **Dentro**
