@@ -35,6 +35,9 @@ Apri un PNG, clicca Canvas nella rail mentre è attivo Perspective, scrivi 40 in
 - Il crop è normalizzato su `stageB` (`app.js:466-470`), a monte del padding: non si sposta quando cambia il padding.
 - Il fit della preview è solo CSS (`styles.css:241-244`): nessun calcolo di zoom da aggiornare.
 
+**Deviations found while planning V1**
+- `applyResizeToPreview` rinominata `applyResizeToStageD`: non scrive più sulla preview, il nome segue `applyRotateSkewToStageB` / `applyCropToStageC`.
+
 ## V2 — Padding lato per lato
 
 **Dentro**
