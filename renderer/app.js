@@ -23,6 +23,8 @@ const state = {
   canvasPad: initialCanvasPad(), // padding in px attorno all'immagine, prima del resize
   canvasLock: true,        // stessi px su tutti i lati
   canvasOpen: false,       // pannello Canvas aperto dalla rail
+  canvasBg: null,          // sfondo delle fasce di padding: null = trasparente, altrimenti '#rrggbb'
+  canvasBgDefault: null,   // sfondo di partenza: bianco per i JPG, altrimenti null
 };
 
 const els = {
@@ -69,6 +71,9 @@ const els = {
   canvasLockBtn: document.getElementById('canvasLockBtn'),
   canvasSides: document.getElementById('canvasSides'),
   canvasPadSideInputs: document.querySelectorAll('#canvasSides input[data-side]'),
+  canvasBgBtns: document.querySelectorAll('.bg-segment-btn'),
+  canvasBgColorRow: document.getElementById('canvasBgColorRow'),
+  canvasBgColorInput: document.getElementById('canvasBgColorInput'),
   canvasResetBtn: document.getElementById('canvasResetBtn'),
   statusSource: document.getElementById('statusSource'),
   statusDirty: document.getElementById('statusDirty'),
@@ -175,6 +180,8 @@ async function openImageFromBytes(bytes, filePath) {
   state.linePoints = initialLine(bitmap.width, bitmap.height);
   state.canvasPad = initialCanvasPad();
   state.canvasLock = true;
+  state.canvasBgDefault = filePath && formatFromPath(filePath) === 'jpeg' ? '#ffffff' : null;
+  resetCanvasBg();
   state.canvasOpen = false;
   state.isDirty = false;
 
@@ -1204,7 +1211,21 @@ function setCanvasLock(locked) {
 function resetCanvas() {
   state.canvasPad = initialCanvasPad();
   fitResizeToCanvasPad();
+  resetCanvasBg();
   syncCanvasUI();
+  state.isDirty = true;
+  scheduleRender();
+  updateUI();
+}
+
+function resetCanvasBg() {
+  state.canvasBg = state.canvasBgDefault;
+  els.canvasBgColorInput.value = state.canvasBg ?? '#ffffff';
+}
+
+function setCanvasBg(value) {
+  if (value === state.canvasBg) return;
+  state.canvasBg = value;
   state.isDirty = true;
   scheduleRender();
   updateUI();
@@ -1223,6 +1244,12 @@ els.canvasPadSideInputs.forEach((input) => {
   input.addEventListener('input', (e) => setCanvasPadSide(e.target.dataset.side, e.target.value, { fromInput: true }));
   input.addEventListener('change', syncCanvasUI);
 });
+els.canvasBgBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    setCanvasBg(btn.dataset.bg === 'color' ? els.canvasBgColorInput.value : null);
+  });
+});
+els.canvasBgColorInput.addEventListener('input', (e) => setCanvasBg(e.target.value));
 els.railCanvasBtn.addEventListener('click', toggleCanvasPanel);
 
 // === END CANVAS ===
@@ -1268,6 +1295,7 @@ function resetAll() {
   state.resizeActive = false;
   state.canvasPad = initialCanvasPad();
   state.canvasLock = true;
+  resetCanvasBg();
   state.canvasOpen = false;
   state.isDirty = true;
   els.cropOverlay.hidden = true;
@@ -1294,6 +1322,8 @@ function closeImage() {
   state.linePoints = null;
   state.canvasPad = initialCanvasPad();
   state.canvasLock = true;
+  state.canvasBgDefault = null;
+  resetCanvasBg();
   state.canvasOpen = false;
   state.tool = 'perspective';
   state.isDirty = false;
@@ -1355,7 +1385,7 @@ function updateUI() {
   els.cropActiveControls.hidden = !state.cropMode;
   els.railCanvasBtn.disabled = !hasImage;
   els.railCanvasBtn.classList.toggle('active', state.canvasOpen);
-  els.canvasPanel.hidden = !state.canvasOpen && !hasCanvasPad();
+  els.canvasPanel.hidden = !state.canvasOpen && !hasCanvasPad() && state.canvasBg === state.canvasBgDefault;
   els.canvasPadAllInput.disabled = !hasImage || !state.canvasLock || state.cropMode;
   els.canvasLockBtn.disabled = !hasImage || state.cropMode;
   els.canvasLockBtn.title = state.canvasLock ? 'Unlock to set each side' : 'Same padding on all sides';
@@ -1363,7 +1393,15 @@ function updateUI() {
   els.canvasPadSideInputs.forEach((input) => { input.disabled = !hasImage || state.cropMode; });
   els.canvasLockBtn.classList.toggle('active', state.canvasLock);
   els.canvasLockBtn.setAttribute('aria-pressed', String(state.canvasLock));
-  els.canvasResetBtn.disabled = !hasImage || !hasCanvasPad() || state.cropMode;
+  els.canvasBgBtns.forEach((btn) => {
+    const on = (btn.dataset.bg === 'color') === (state.canvasBg !== null);
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-pressed', String(on));
+    btn.disabled = !hasImage || state.cropMode;
+  });
+  els.canvasBgColorRow.hidden = state.canvasBg === null;
+  els.canvasBgColorInput.disabled = !hasImage || state.cropMode;
+  els.canvasResetBtn.disabled = !hasImage || state.cropMode || (!hasCanvasPad() && state.canvasBg === state.canvasBgDefault);
   els.resizeWInput.disabled = !hasImage;
   els.resizeHInput.disabled = !hasImage;
   els.resizePctInput.disabled = !hasImage;
